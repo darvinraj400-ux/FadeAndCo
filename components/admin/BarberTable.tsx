@@ -225,6 +225,14 @@ export function BarberTable({
           Add barber
         </Button>
       </div>
+      {barbers.length === 0 ? (
+        <p
+          role="status"
+          className="rounded-2xl border border-zinc-800 px-4 py-8 text-center text-sm text-zinc-400"
+        >
+          No barbers yet.
+        </p>
+      ) : (
       <div className="overflow-x-auto rounded-2xl border border-zinc-800">
         <Table>
           <TableHeader>
@@ -289,6 +297,7 @@ export function BarberTable({
           </TableBody>
         </Table>
       </div>
+      )}
 
       <Dialog
         open={dialogOpen}

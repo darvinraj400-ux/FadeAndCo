@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 // Note: /admin access control is enforced in middleware.ts (layouts cannot
 // read the request path, so gating there would redirect-loop /admin/login).

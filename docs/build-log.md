@@ -2,6 +2,29 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-04 — Layer 6A: polish, metadata, README
+
+- Error boundaries: root logs via `useEffect` + digest; new admin-context
+  boundary. Six loading skeletons matching content shapes. Dark 404 with
+  home link and disclaimer.
+- Empty states: "No appointments today." banner, "No services yet.",
+  "No barbers yet." (+ `role="status"`); appointments/slots already had
+  theirs — copy verified.
+- Metadata: title template + absolute homepage title, resilient
+  `metadataBase` via never-throw `lib/site-url.ts` (shared with sitemap),
+  OG/Twitter, Inter. Case-study title/description (page itself is 6B).
+  robots disallows `/admin` + `/api`; sitemap lists `/` + `/case-study`;
+  admin layout + login carry noindex.
+- README (85 lines): design decision, stack table, local setup, env table,
+  schema note, concurrency test with expected output, deploy notes, scope,
+  MIT, footer. TODO markers for demo/case-study URLs + screenshot.
+- Review fixes: never-throw origin helper, absolute homepage title, Inter
+  without dangling variable, admin-wide noindex, dark root skeleton,
+  flex-1 404 wrapper.
+- NOT done here (no push, no deploy, per instructions): C1 waitUntil email
+  on Vercel, C2 production concurrency, C3 browser rate-limit check, real-
+  device mobile sanity, case study (6B), screenshots.
+
 ## 2026-10-04 — Layer 5: admin dashboard, CRUD, time-off
 
 - Auth: `fade_admin` HMAC cookie + Edge middleware verified unchanged

@@ -57,6 +57,14 @@ export function TodaySchedule({
             {count} appointment{count === 1 ? "" : "s"} · shop local (
             {tzAbbrev})
           </p>
+          {count === 0 ? (
+            <p
+              role="status"
+              className="mt-3 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-sm text-zinc-400"
+            >
+              No appointments today.
+            </p>
+          ) : null}
         </div>
         <div className="flex items-center gap-2 text-sm">
           <Link

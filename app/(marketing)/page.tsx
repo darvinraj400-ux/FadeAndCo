@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase";
 import { shopTzAbbrev } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  // Absolute: skip the "%s · Fade & Co." template (the name is in the string).
+  title: { absolute: "Fade & Co. — barbershop booking" },
+  description:
+    "Sharp cuts, honest prices, no guesswork. Book online in under a minute — or just tell us what you want.",
+};
 
 const SERVICE_ORDER = [
   "haircut",
