@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+function isValidIanaTimezone(tz: string): boolean {
+  try {
+    const supported = (
+      Intl as unknown as {
+        supportedValuesOf?: (key: string) => string[];
+      }
+    ).supportedValuesOf;
+    if (typeof supported === "function") {
+      return supported.call(Intl, "timeZone").includes(tz);
+    }
+    new Intl.DateTimeFormat("en", { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().min(1, "NEXT_PUBLIC_SUPABASE_URL is required"),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z
@@ -14,7 +31,12 @@ const envSchema = z.object({
   GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
   RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY is required"),
   SHOP_EMAIL: z.string().min(1, "SHOP_EMAIL is required"),
-  SHOP_TIMEZONE: z.string().min(1, "SHOP_TIMEZONE is required"),
+  SHOP_TIMEZONE: z
+    .string()
+    .min(1, "SHOP_TIMEZONE is required")
+    .refine(isValidIanaTimezone, {
+      message: "SHOP_TIMEZONE must be a valid IANA timezone",
+    }),
   ADMIN_PASSWORD: z.string().min(1, "ADMIN_PASSWORD is required"),
   APP_URL: z.string().min(1, "APP_URL is required"),
 });
