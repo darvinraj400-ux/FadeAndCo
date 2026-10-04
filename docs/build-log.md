@@ -2,6 +2,36 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-04 — Layer 5: admin dashboard, CRUD, time-off
+
+- Auth: `fade_admin` HMAC cookie + Edge middleware verified unchanged
+  (LeadFlow pattern). Login/logout routes (zod, 500ms delay, no logging),
+  dark login card, admin shell (Today/Appointments/Services/Barbers +
+  logout), `StatusBadge` (indigo/green/zinc/red, unknown-status fallback).
+- Today schedule (hero): server page + server component, per-barber cards
+  with sorted blocks, time-off stripes, free windows (30-min probe,
+  cancelled excluded), `?date` prev/next with today fallback. Per-barber
+  hours in cards (no mixed global range).
+- Appointments: server filters (status pills, barber select, day) + client
+  table with Dialog detail (mailto, notes) and Complete/No-show/Cancel
+  actions via existing PATCH (cancellation email on cancel).
+- Services/barbers CRUD APIs (admin-gated; `slug_taken` / `has_future_bookings`
+  409s) + tables (dialogs, active toggles, price dollars↔cents without float
+  artifacts). Barber edit: service checkboxes + 7-day hours editor +
+  time-off tab. Relations via replace-all `saveBarberRelations` with
+  validate-before-delete (dup-day guard).
+- Time-off API (overlap check vs confirmed only, 409 with count) + editor.
+- Fixes from review: resurrection `excludeAppointmentId` (completed/no-show
+  re-confirm works), ref-code retry loop (self-heals seed-sequence
+  collisions), dialog close-while-pending guards, login/logout error toasts.
+  Redirect for bad `?date` abandoned: `redirect()` serializes as a digest
+  in this Next version — fallback rendering kept deliberately.
+- Verified live: 13-step smoke all green (307/401/login/3 columns/filters/
+  PATCH cycle/CRUD create-edit-delete/conflict 409/logout/public intact);
+  resurrection proven 200; delete/conflict guards proven 409 with counts.
+- Deferred: login rate limiting, CSRF origin check, stateful sessions
+  (inherited single-password design, documented trade-offs).
+
 ## 2026-10-04 — Layer 4: landing, AI intent parsing, NL booking input
 
 - Landing (`app/(marketing)/page.tsx`): async server component, 7 sections,

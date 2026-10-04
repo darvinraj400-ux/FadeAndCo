@@ -105,26 +105,27 @@ export async function POST(req: Request) {
   // appointment's shop-local day (same day as the YYYYMMDD part — a
   // created_at-based counter would collide with seeded/future bookings).
   // The counter has a tiny race window (two concurrent bookings for
-  // different slots on the same day can compute the same XXXX): one retry
-  // with a recount covers the demo case; a second collision surfaces as a
+  // different slots on the same day can compute the same XXXX): retry with
+  // an incrementing suffix, bounded — a persistent collision surfaces as a
   // generic 500, never as a phantom success. Proper fix: DB sequence.
   const { start: refDayStart, end: refDayEnd } = shopDayBounds(startsAt);
-  async function nextReferenceCode(): Promise<string> {
+  async function countForDay(): Promise<number> {
     const { count, error: countError } = await admin
       .from("fade_appointments")
       .select("id", { count: "exact", head: true })
       .gte("starts_at", refDayStart.toISOString())
       .lt("starts_at", refDayEnd.toISOString());
     if (countError) throw countError;
-    return `FC-${formatShopTime(startsAt, "yyyyMMdd")}-${String((count ?? 0) + 1).padStart(4, "0")}`;
+    return count ?? 0;
   }
-  let referenceCode: string;
+  let dayCount: number;
   try {
-    referenceCode = await nextReferenceCode();
+    dayCount = await countForDay();
   } catch (countError) {
     console.error("POST /api/bookings counter failed:", countError);
     return NextResponse.json({ error: "booking_failed" }, { status: 500 });
   }
+  const refPrefix = `FC-${formatShopTime(startsAt, "yyyyMMdd")}-`;
 
   const row = {
     barber_id: input.barberId,
@@ -146,17 +147,23 @@ export async function POST(req: Request) {
       .single();
   }
 
-  let attempt = await tryInsert(referenceCode);
-  if (attempt.error && isReferenceCollision(attempt.error)) {
-    try {
-      referenceCode = await nextReferenceCode();
-    } catch {
-      // Recount failed — retry once with the same code; a second 23505
-      // surfaces as a generic 500 below.
+  let data: { id: string } | null = null;
+  let referenceCode = "";
+  let error: { code?: string; message?: string } | null = null;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    referenceCode = `${refPrefix}${String(dayCount + 1 + attempt).padStart(4, "0")}`;
+    const res = await tryInsert(referenceCode);
+    if (!res.error) {
+      data = res.data as { id: string } | null;
+      error = null;
+      break;
     }
-    attempt = await tryInsert(referenceCode);
+    if (!isReferenceCollision(res.error)) {
+      error = res.error;
+      break;
+    }
+    error = res.error;
   }
-  const { data, error } = attempt;
 
   if (error) {
     // The exclusion constraint is the source of truth for race safety.

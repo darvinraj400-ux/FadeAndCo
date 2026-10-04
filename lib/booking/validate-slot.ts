@@ -9,6 +9,8 @@ type AdminClient = ReturnType<typeof createAdminClient>;
 // re-runs the same availability computation on the server and requires the
 // requested startsAt to exactly match an offered slot (hours, timeOff,
 // minimum notice, grid alignment, and closing fit all enforced).
+// excludeAppointmentId: when re-validating an existing row (resurrection),
+// ignore that row itself — otherwise completed/no_show rows self-collide.
 export async function isSlotBookable(
   admin: AdminClient,
   input: {
@@ -16,6 +18,7 @@ export async function isSlotBookable(
     serviceId: string;
     startsAt: Date;
     now?: Date;
+    excludeAppointmentId?: string;
   }
 ): Promise<boolean> {
   const { data: service } = await admin
@@ -33,13 +36,17 @@ export async function isSlotBookable(
   if (!hours || hours.length === 0) return false;
 
   const { start, end } = shopDayBounds(input.startsAt);
-  const { data: appointments } = await admin
+  let apptQuery = admin
     .from("fade_appointments")
     .select("starts_at,ends_at")
     .eq("barber_id", input.barberId)
     .neq("status", "cancelled")
     .lt("starts_at", end.toISOString())
     .gt("ends_at", start.toISOString());
+  if (input.excludeAppointmentId) {
+    apptQuery = apptQuery.neq("id", input.excludeAppointmentId);
+  }
+  const { data: appointments } = await apptQuery;
   const { data: timeOff } = await admin
     .from("fade_time_off")
     .select("starts_at,ends_at")

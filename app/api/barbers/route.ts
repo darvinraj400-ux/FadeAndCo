@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase";
+import { isAdminRequest } from "@/lib/admin-auth";
+import { barberInputSchema, slugify } from "@/lib/admin-schemas";
+import { saveBarberRelations } from "@/lib/barber-relations";
 
 export const dynamic = "force-dynamic";
 
@@ -53,4 +56,58 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "barbers_failed" }, { status: 500 });
   }
   return NextResponse.json({ barbers: data ?? [] });
+}
+
+export async function POST(req: Request) {
+  if (!isAdminRequest(req)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+  }
+  const parsed = barberInputSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        error: "validation_error",
+        issues: parsed.error.issues.map((i) => ({
+          path: i.path,
+          message: i.message,
+        })),
+      },
+      { status: 400 }
+    );
+  }
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("fade_barbers")
+    .insert({
+      name: parsed.data.name,
+      slug: parsed.data.slug ?? slugify(parsed.data.name, "barber"),
+      bio: parsed.data.bio ?? null,
+      active: parsed.data.active ?? true,
+    })
+    .select("id,name,slug,bio,active")
+    .single();
+  if (error) {
+    if (error.code === "23505") {
+      return NextResponse.json({ error: "slug_taken" }, { status: 409 });
+    }
+    console.error("POST /api/barbers failed:", error);
+    return NextResponse.json({ error: "barber_failed" }, { status: 500 });
+  }
+  const relError = await saveBarberRelations(
+    admin,
+    (data as { id: string }).id,
+    parsed.data.serviceIds,
+    parsed.data.weeklyHours
+  );
+  if (relError) {
+    console.error("POST /api/barbers relations failed:", relError);
+    return NextResponse.json({ error: "barber_failed" }, { status: 500 });
+  }
+  return NextResponse.json({ barber: data }, { status: 201 });
 }

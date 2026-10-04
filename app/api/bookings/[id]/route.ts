@@ -63,6 +63,7 @@ export async function PATCH(
       barberId: existing.barber_id as string,
       serviceId: existing.service_id as string,
       startsAt: new Date(existing.starts_at as string),
+      excludeAppointmentId: id,
     });
     if (!bookable) {
       return NextResponse.json(

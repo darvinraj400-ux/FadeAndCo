@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
+import { clearAdminCookie } from "@/lib/admin-auth";
+
+export const dynamic = "force-dynamic";
 
 export async function POST() {
-  return NextResponse.json({ todo: "Layer 2+" }, { status: 501 });
+  const res = NextResponse.json({ ok: true });
+  clearAdminCookie(res);
+  return res;
 }
