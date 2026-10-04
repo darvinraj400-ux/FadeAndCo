@@ -2,6 +2,36 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-04 — Layer 3: booking flow, race-safe create, concurrency test
+
+- `GET /api/slots`: zod params, barber/service/mapping 404s, no-hours → 200 `[]`,
+  overlap day filters, server-formatted display times, `no-store`.
+- `POST /api/bookings` (public): schema validation, server-side slot
+  re-validation (`lib/booking/validate-slot.ts` — direct-POST bypass closed:
+  3 AM and off-grid attempts return 409), ref codes scoped to the appointment's
+  shop day with one recount retry on 23505, 23P01 → 409 `slot_taken`,
+  `waitUntil` confirmation email, `maxDuration = 30`, 201
+  `{ ok, reference_code, appointment_id }`.
+- Admin `GET /api/bookings` (status/barberId/date filters, limit 50/max 200)
+  and `PATCH /api/bookings/[id]` (status enum, resurrection re-validated,
+  cancellation email on →cancelled), both `isAdminRequest`-gated (401 verified).
+- `GET /api/services`, `GET /api/barbers?serviceId` (M:N filter),
+  `GET /api/shop-days` (14 unique shop days, server-formatted so the client
+  needs no timezone logic).
+- Emails: LeadFlow pattern (boolean, never-throw, `re_` gate, `escapeHtml`);
+  `send-booking-confirmation.ts` new, `send-cancellation.ts` rewritten,
+  dead `send-confirmation.ts` stub removed.
+- `/book`: 4-step wizard (Service → Barber → Time → Confirm) with progress,
+  back/next rules, 409 → toast + back to slots + refresh, success screen;
+  `NlBookingInput`/`ParsedIntentCard` return null (Layer 4). Toaster in layout.
+- `scripts/test-concurrency.ts`: same-tick dual POST → exactly one 201 + one
+  409, DB count == 1, winner cleaned up. PASS live (ref FC-20261006-0005).
+  Constraint fires as Postgres `23P01`.
+- Reviews: direct-POST bypass fixed + proven, ref-counter realigned to shop
+  day (was colliding with seed refs), PATCH hardening, email failure logging.
+  Deferred: rate limiting (needs infra), random ref suffixes, admin session
+  redesign (all noted, auth untouched by design).
+
 ## 2026-10-04 — Layer 2: schema, timezone, availability, seed
 
 - `docs/schema.sql`: five `fade_` tables, `btree_gist` exclusion constraint

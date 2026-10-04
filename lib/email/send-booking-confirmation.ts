@@ -2,8 +2,8 @@ import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/email/escape-html';
 import { formatShopTime, shopTzAbbrev } from '@/lib/timezone';
 
-// Fixed-template cancellation notice. Same shape as the confirmation:
-// boolean return, never throws, no-op without a real Resend key.
+// Fixed-template confirmation. Deliberate design decision: no AI-generated
+// text — the customer sees service, barber, time, and reference only.
 
 // TODO: replace with a verified sending domain for production.
 const FROM_ADDRESS = 'Fade & Co <onboarding@resend.dev>';
@@ -14,47 +14,51 @@ const RESEND_CONFIGURED =
 
 if (!RESEND_CONFIGURED) {
   console.warn(
-    'send-cancellation: RESEND_API_KEY missing or placeholder — cancellation emails will no-op.',
+    'send-booking-confirmation: RESEND_API_KEY missing or placeholder — confirmation emails will no-op.',
   );
 }
 
-export async function sendBookingCancellation(
+export async function sendBookingConfirmation(
   to: string,
   customerName: string,
   referenceCode: string,
   serviceName: string,
   barberName: string,
   startsAt: Date,
+  endsAt: Date,
 ): Promise<boolean> {
   if (!RESEND_CONFIGURED) return false;
   try {
     const resend = new Resend(RESEND_API_KEY!);
-    const when = `${formatShopTime(startsAt, "EEEE, d MMM yyyy 'at' h:mm a")} (${shopTzAbbrev()})`;
-    const subject = `Cancellation confirmed — ${referenceCode}`;
+    const when = `${formatShopTime(startsAt, "EEEE, d MMM yyyy 'at' h:mm a")} – ${formatShopTime(endsAt, 'h:mm a')} (${shopTzAbbrev()})`;
+    const subject = `Your Fade & Co. booking — ${referenceCode}`;
     const text = [
       `Hi ${customerName},`,
       '',
-      'Your appointment has been cancelled and the slot released.',
+      'Your appointment is confirmed.',
       '',
       `Service:   ${serviceName}`,
       `Barber:    ${barberName}`,
-      `Was:       ${when}`,
+      `When:      ${when}`,
       `Reference: ${referenceCode}`,
       '',
-      'Your slot has been released — feel free to book again any time.',
+      'Address: [shop address placeholder]',
+      '',
+      'Need to cancel or reschedule? Reply to this email or call the shop.',
       '',
       '— Fade & Co.',
     ].join('\n');
     const html = [
       `<p>Hi ${escapeHtml(customerName)},</p>`,
-      `<p>Your appointment has been cancelled and the slot released.</p>`,
+      `<p>Your appointment is confirmed.</p>`,
       `<ul>`,
       `<li>Service: ${escapeHtml(serviceName)}</li>`,
       `<li>Barber: ${escapeHtml(barberName)}</li>`,
-      `<li>Was: ${escapeHtml(when)}</li>`,
+      `<li>When: ${escapeHtml(when)}</li>`,
       `<li>Reference: <strong>${escapeHtml(referenceCode)}</strong></li>`,
       `</ul>`,
-      `<p>Your slot has been released — feel free to book again any time.</p>`,
+      `<p>Address: [shop address placeholder]</p>`,
+      `<p>Need to cancel or reschedule? Reply to this email or call the shop.</p>`,
       `<p>— Fade &amp; Co.</p>`,
     ].join('\n');
     // NOTE: resend.emails.send resolves (does not throw) on API errors,
@@ -67,12 +71,12 @@ export async function sendBookingCancellation(
       html,
     });
     if (error) {
-      console.error('send-cancellation: send failed:', error);
+      console.error('send-booking-confirmation: send failed:', error);
       return false;
     }
     return true;
   } catch (err) {
-    console.error('send-cancellation: send failed:', err);
+    console.error('send-booking-confirmation: send failed:', err);
     return false;
   }
 }

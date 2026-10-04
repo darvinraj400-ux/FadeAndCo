@@ -1,3 +1,4 @@
+// Layer 4 stub: parsed-intent preview card. Returns null for now.
 export function ParsedIntentCard() {
-  return <div>ParsedIntentCard stub (Layer 1).</div>;
+  return null;
 }
