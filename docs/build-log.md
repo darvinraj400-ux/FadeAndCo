@@ -2,6 +2,38 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-04 — Layer 4: landing, AI intent parsing, NL booking input
+
+- Landing (`app/(marketing)/page.tsx`): async server component, 7 sections,
+  dark zinc + indigo-500, no gradients/images. Real services (fixed slug
+  order), barbers with M:N service lists, hours grouped by barber with
+  `shopTzAbbrev()` note, fake address, verbatim fictional-shop disclaimer.
+- `POST /api/parse-booking`: `{text}` 10–500 chars, 10/min in-memory IP limit
+  (LeadFlow pattern, last-entry XFF), Groq `openai/gpt-oss-120b` →
+  Gemini `gemini-3.1-flash-lite` fallback via `generateObject` (`temperature: 0`,
+  unchanged `parsedIntentSchema`). Names fuzzy-resolved to IDs (exact →
+  word → substring, deterministic); unknown names → null. Candidate slots
+  (max 8) only for valid service+barber+day (+ mapping check), time bands
+  morning/afternoon/evening/specific per spec. `maxDuration = 30`.
+- `lib/booking/day-hints.ts`: today/tonight/tomorrow/day-after/weekdays +
+  abbrevs/weekend, `next X` = coming X + 7, noon-instant convention,
+  host-independent. `lib/booking/parse-intent.ts` replaced (was stale stub).
+- `/book`: NL card above the wizard (opt-in, divider, wizard primary).
+  `ParsedIntentCard` shows the interpretation explicitly (confidence-gated
+  fallback, "You said" raw block, ≤8 slot buttons, null-vs-[] copy).
+  `BookingFlow` additive `nlPrefill` prop: slot jumps → Confirm (with day
+  preserved on Back via `initialDate`), ids → slot/barber step.
+- Verified live: full parse (Fade/Sam/Saturday, 0.99), partial (Haircut only,
+  slots null), gibberish (0.1, all null), 10×200 + 429 on 11th, candidate
+  slot booked 201 then cleaned, no hallucinations (exact vocab or null).
+  Invalid pair (Kids Cut + Priya) yields no jump targets; "this evening"
+  resolves; "haircut" deterministically matches Haircut.
+- Reviews: fuzzy tiers, pair validation, day preservation, copy branches,
+  landing sort/keys/parallel fetch, upstream error distinction, prompt-tag
+  stripping. Deferred: AI spend controls (cache/budget/Turnstile), Redis
+  rate limiting, evening-band clamping (bands are cosmetic — slots are
+  hours-constrained), test suite (Layer 6).
+
 ## 2026-10-04 — Layer 3: booking flow, race-safe create, concurrency test
 
 - `GET /api/slots`: zod params, barber/service/mapping 404s, no-hours → 200 `[]`,

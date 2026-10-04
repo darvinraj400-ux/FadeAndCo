@@ -1,4 +1,4 @@
-import { BookingFlow } from "@/components/booking/BookingFlow";
+import { BookPageClient } from "@/components/booking/BookPageClient";
 
 export default function BookPage() {
   return (
@@ -8,9 +8,8 @@ export default function BookPage() {
         <p className="mt-1 text-sm text-zinc-400">
           Pick a service, barber, and time — confirmation is instant.
         </p>
-        {/* Layer 4 adds the natural-language input here. */}
         <div className="mt-6">
-          <BookingFlow />
+          <BookPageClient />
         </div>
       </section>
     </div>

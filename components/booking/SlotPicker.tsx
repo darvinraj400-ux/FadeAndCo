@@ -24,12 +24,16 @@ export function SlotPicker({
   value,
   onChange,
   refreshKey,
+  initialDate = null,
 }: {
   barberId: string;
   serviceId: string;
   value: string | null;
   onChange: (slot: SlotItem | null, dayLabel: string) => void;
   refreshKey: number;
+  // Shop-local YYYY-MM-DD to preselect (NL jumps). Used once when days load;
+  // afterwards the user owns the selection.
+  initialDate?: string | null;
 }) {
   const [days, setDays] = useState<ShopDay[]>([]);
   const [dateStr, setDateStr] = useState<string | null>(null);
@@ -45,8 +49,18 @@ export function SlotPicker({
         if (!res.ok) throw new Error(`shop-days ${res.status}`);
         const body = (await res.json()) as { days: ShopDay[] };
         if (cancelled) return;
-        setDays(body.days ?? []);
-        setDateStr((prev) => prev ?? body.days?.[0]?.value ?? null);
+        const loaded = body.days ?? [];
+        setDays(loaded);
+        setDateStr((prev) => {
+          if (prev) return prev;
+          if (
+            initialDate &&
+            loaded.some((d) => d.value === initialDate)
+          ) {
+            return initialDate;
+          }
+          return loaded[0]?.value ?? null;
+        });
       } catch {
         if (!cancelled) toast.error("Could not load available days.");
       } finally {
@@ -57,6 +71,8 @@ export function SlotPicker({
     return () => {
       cancelled = true;
     };
+    // initialDate is mount-time only: the picker remounts per step visit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

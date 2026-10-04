@@ -21,6 +21,18 @@ import {
 
 const STEPS = ["Service", "Barber", "Time", "Confirm"] as const;
 
+export type NlPrefill =
+  | {
+      kind: "slot";
+      slot: SlotItem;
+      dayLabel: string;
+      dayValue: string;
+      serviceId: string;
+      barberId: string;
+    }
+  | { kind: "ids"; serviceId: string | null; barberId: string | null }
+  | null;
+
 type CreatedBooking = {
   reference_code: string;
   service: ServiceOption;
@@ -36,7 +48,7 @@ const EMPTY_FORM: CustomerForm = {
   notes: "",
 };
 
-export function BookingFlow() {
+export function BookingFlow({ nlPrefill = null }: { nlPrefill?: NlPrefill }) {
   const [step, setStep] = useState(0);
   const [services, setServices] = useState<ServiceOption[]>([]);
   const [barbers, setBarbers] = useState<BarberOption[]>([]);
@@ -44,6 +56,7 @@ export function BookingFlow() {
   const [barberId, setBarberId] = useState<string | null>(null);
   const [slot, setSlot] = useState<SlotItem | null>(null);
   const [dayLabel, setDayLabel] = useState("");
+  const [nlDayValue, setNlDayValue] = useState<string | null>(null);
   const [form, setForm] = useState<CustomerForm>(EMPTY_FORM);
   const [loadingServices, setLoadingServices] = useState(true);
   const [loadingBarbers, setLoadingBarbers] = useState(false);
@@ -100,6 +113,36 @@ export function BookingFlow() {
       setBarberId(null);
     }
   }, [serviceId, loadBarbers]);
+
+  // Natural-language prefill from ParsedIntentCard. Slot jumps go straight
+  // to Confirm (ConfirmStep only needs the slot object + dayLabel).
+  // Service/barber-only prefills land on the slot or barber step.
+  // Note: barbers load async after serviceId is set — the step guards
+  // (`service &&`, `barber &&`) render Confirm only once lists resolve.
+  useEffect(() => {
+    if (!nlPrefill) return;
+    if (nlPrefill.kind === "slot") {
+      setServiceId(nlPrefill.serviceId);
+      setBarberId(nlPrefill.barberId);
+      setSlot(nlPrefill.slot);
+      setDayLabel(nlPrefill.dayLabel);
+      setNlDayValue(nlPrefill.dayValue);
+      setSubmitError(null);
+      setStep(3);
+    } else {
+      if (nlPrefill.serviceId) setServiceId(nlPrefill.serviceId);
+      if (nlPrefill.barberId) setBarberId(nlPrefill.barberId);
+      setSlot(null);
+      setNlDayValue(null);
+      setStep(
+        nlPrefill.serviceId && nlPrefill.barberId
+          ? 2
+          : nlPrefill.serviceId
+            ? 1
+            : 0
+      );
+    }
+  }, [nlPrefill]);
 
   const service = services.find((s) => s.id === serviceId) ?? null;
   const barber = barbers.find((b) => b.id === barberId) ?? null;
@@ -175,6 +218,7 @@ export function BookingFlow() {
     setBarberId(null);
     setSlot(null);
     setDayLabel("");
+    setNlDayValue(null);
     setForm(EMPTY_FORM);
     setSubmitError(null);
     setCreated(null);
@@ -242,6 +286,7 @@ export function BookingFlow() {
           onChange={(id) => {
             setServiceId(id);
             setSlot(null);
+            setNlDayValue(null);
           }}
           loading={loadingServices}
         />
@@ -253,6 +298,7 @@ export function BookingFlow() {
           onChange={(id) => {
             setBarberId(id);
             setSlot(null);
+            setNlDayValue(null);
           }}
           loading={loadingBarbers}
         />
@@ -264,6 +310,7 @@ export function BookingFlow() {
           value={slot?.startsAt ?? null}
           onChange={handleSlotChange}
           refreshKey={refreshKey}
+          initialDate={nlDayValue}
         />
       ) : null}
       {step === 3 && service && barber && slot ? (
