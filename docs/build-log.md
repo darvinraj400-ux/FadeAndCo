@@ -2,6 +2,24 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-05 — Design: warm barbershop identity
+
+- Breaks from the SupportAI/LeadFlow dark-zinc + indigo palette: cream/bone
+  storefront (Instrument Serif display, Inter body, brass fills with dark
+  text), deep warm-brown admin wing (cream text, amber accents, same serif).
+- Tokens in `globals.css` (`bone/parchment/paper/ink/bark/brass/bronze/
+  line/brick/coal/cream/panel/ember/moss`); shadcn primitives follow the
+  warm `:root` set, `.dark` repointed so it can't resurrect the old theme.
+- Contrast (measured): body 15.49, secondary 5.45, brass buttons 6.79,
+  bronze accent 5.03, brick 5.58, admin pairs 5.58–16.43. Amber reserved
+  for fills/borders; text accents use dark-on-amber or bronze.
+- Visual QA loop (playwright-core + headless shell, dev server): baselines
+  of landing/book/admin/services, re-shoots after, mobile 390px landing.
+  Fixed from inspection: serif admin headings, transparent outline buttons
+  on coal, dark admin error text, native-control `color-scheme`, focus
+  rings on hand-rolled CTAs, `role="status"` empty states. Zero console
+  errors on every page.
+
 ## 2026-10-04 — Layer 6A: polish, metadata, README
 
 - Error boundaries: root logs via `useEffect` + digest; new admin-context
