@@ -2,6 +2,19 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-05 — Layer 6B: case study page
+
+- `app/(marketing)/case-study/page.tsx` replaces the stub: warm-cream
+  engineering write-up (Instrument Serif headings, token-only classes),
+  hero with demo/source links, 8 sections, 6 screenshots from
+  `public/case-study/` with real PNG dimensions.
+- Copy distilled from the build log: race-safety constraint, half-open
+  intervals, direct-POST bypass fix, `waitUntil` email, NL shows-its-work,
+  timezone-first. Honest deltas from the brief: concurrency output uses the
+  real 409 message, production email inbox check still pending deploy.
+- Screenshots verified genuine (landing, wizard, NL card, schedule,
+  services, real production concurrency PASS).
+
 ## 2026-10-05 — Design: warm barbershop identity
 
 - Breaks from the SupportAI/LeadFlow dark-zinc + indigo palette: cream/bone
