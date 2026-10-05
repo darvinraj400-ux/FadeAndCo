@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { siteOrigin } from "@/lib/site-url";
 import "./globals.css";
@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
 
 const inter = Inter({
   subsets: ["latin"],
+});
+
+const displaySerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-display-serif",
 });
 
 export const metadata: Metadata = {
@@ -48,11 +54,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable} h-full antialiased`}
     >
       <body className={`${inter.className} min-h-full flex flex-col`}>
         {children}
-        <Toaster richColors position="top-center" />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

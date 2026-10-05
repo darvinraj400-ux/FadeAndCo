@@ -111,30 +111,30 @@ export default async function MarketingHomePage() {
   }
 
   return (
-    <div className="bg-zinc-950 text-zinc-100">
+    <div className="bg-bone text-ink">
       {/* Nav */}
-      <nav className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+      <nav className="sticky top-0 z-10 border-b border-line bg-bone/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <Link href="/" className="font-serif text-xl">
+          <Link href="/" className="font-display text-2xl">
             Fade &amp; Co.
           </Link>
-          <div className="hidden items-center gap-6 text-sm text-zinc-400 sm:flex">
-            <a href="#services" className="hover:text-zinc-100">
+          <div className="hidden items-center gap-6 text-sm text-bark sm:flex">
+            <a href="#services" className="hover:text-ink">
               Services
             </a>
-            <a href="#barbers" className="hover:text-zinc-100">
+            <a href="#barbers" className="hover:text-ink">
               Barbers
             </a>
-            <a href="#hours" className="hover:text-zinc-100">
+            <a href="#hours" className="hover:text-ink">
               Hours
             </a>
-            <a href="/book" className="hover:text-zinc-100">
+            <a href="/book" className="hover:text-ink">
               Book
             </a>
           </div>
           <Link
             href="/book"
-            className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400"
+            className="rounded-lg bg-brass px-4 py-2 text-sm font-medium text-ink hover:bg-brass/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
           >
             Book now
           </Link>
@@ -143,28 +143,28 @@ export default async function MarketingHomePage() {
 
       {/* Hero */}
       <section className="mx-auto max-w-5xl px-4 py-20 md:py-28">
-        <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
+        <h1 className="font-display text-5xl tracking-tight md:text-7xl">
           Sharp cuts, honest prices, no guesswork.
         </h1>
-        <p className="mt-4 max-w-2xl text-lg text-zinc-400">
+        <p className="mt-4 max-w-2xl text-lg text-bark">
           Fade &amp; Co. is a three-chair barbershop. Book online in under a
           minute — or just tell us what you want and let the AI figure it out.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/book"
-            className="rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-400"
+            className="rounded-lg bg-brass px-5 py-2.5 text-sm font-medium text-ink hover:bg-brass/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
           >
             Book now
           </Link>
           <a
             href="#services"
-            className="rounded-lg border border-zinc-700 px-5 py-2.5 text-sm font-medium text-zinc-200 hover:border-zinc-500"
+            className="rounded-lg border border-line px-5 py-2.5 text-sm font-medium text-ink hover:border-bronze focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
           >
             See services
           </a>
         </div>
-        <p className="mt-6 text-sm text-zinc-400">
+        <p className="mt-6 text-sm text-bark">
           Walk-ins welcome · Tue–Sun · 09:00–19:00 (shop local)
         </p>
       </section>
@@ -174,22 +174,22 @@ export default async function MarketingHomePage() {
         id="services"
         className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
       >
-        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
           Services
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {orderedServices.map((s) => (
             <div
               key={s.id}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5"
+              className="rounded-2xl border border-line bg-parchment p-5"
             >
               <div className="flex items-baseline justify-between gap-2">
                 <h3 className="font-medium">{s.name}</h3>
-                <span className="text-sm text-zinc-400">
+                <span className="font-mono text-sm text-bark">
                   ${(s.price_cents / 100).toFixed(0)}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-zinc-400">
+              <p className="mt-1 text-sm text-bark">
                 {s.duration_minutes} min
                 {s.description ? ` · ${s.description}` : ""}
               </p>
@@ -203,23 +203,23 @@ export default async function MarketingHomePage() {
         id="barbers"
         className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
       >
-        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
           The chairs
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {barberList.map((b) => (
             <div
               key={b.id}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5"
+              className="rounded-2xl border border-line bg-parchment p-5"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-zinc-800 text-2xl font-semibold text-zinc-400">
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-brass/25 font-display text-4xl text-bronze">
                 {b.name.charAt(0)}
               </div>
-              <h3 className="mt-3 font-serif text-lg">{b.name}</h3>
+              <h3 className="mt-3 font-display text-xl">{b.name}</h3>
               {b.bio ? (
-                <p className="mt-1 text-sm text-zinc-400">{b.bio}</p>
+                <p className="mt-1 text-sm text-bark">{b.bio}</p>
               ) : null}
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-2 text-sm text-bark">
                 {(servicesByBarber.get(b.id) ?? []).join(", ")}
               </p>
             </div>
@@ -232,24 +232,24 @@ export default async function MarketingHomePage() {
         id="hours"
         className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
       >
-        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
           Hours
         </h2>
         <div className="mt-8 space-y-8">
           {barberList.map((b) => (
             <div key={b.id}>
-              <h3 className="font-medium">{b.name}</h3>
+              <h3 className="font-display text-xl">{b.name}</h3>
               <table className="mt-2 w-full max-w-md text-sm">
                 <tbody>
                   {(hoursByBarber.get(b.id) ?? []).map((h) => (
                     <tr
                       key={`${b.id}-${h.day_of_week}-${h.start_time}`}
-                      className="border-b border-zinc-800"
+                      className="border-b border-line"
                     >
-                      <td className="py-2 text-zinc-400">
+                      <td className="py-2 text-bark">
                         {DAY_NAMES[h.day_of_week]}
                       </td>
-                      <td className="py-2 text-right">
+                      <td className="py-2 text-right font-mono text-sm">
                         {h.start_time.slice(0, 5)} – {h.end_time.slice(0, 5)}
                       </td>
                     </tr>
@@ -259,42 +259,42 @@ export default async function MarketingHomePage() {
             </div>
           ))}
         </div>
-        <p className="mt-6 text-sm text-zinc-400">
+        <p className="mt-6 text-sm text-bark">
           Times shown in shop local ({shopTzAbbrev()}).
         </p>
       </section>
 
       {/* Location */}
       <section className="mx-auto max-w-5xl px-4 py-20 md:py-28">
-        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
           Find us
         </h2>
-        <p className="mt-4 text-zinc-400">
+        <p className="mt-4 text-bark">
           12 Jalan Telawi, Bangsar, Kuala Lumpur
         </p>
-        <p className="mt-1 text-sm text-zinc-400">
+        <p className="mt-1 text-sm text-bark">
           Two doors down from the kopitiam with the green awning.
         </p>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800">
+      <footer className="border-t border-line">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 py-12 sm:grid-cols-3">
           <div>
             <h3 className="text-sm font-medium">Shop</h3>
-            <ul className="mt-3 space-y-2 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-bark">
               <li>
-                <a href="#services" className="hover:text-zinc-100">
+                <a href="#services" className="hover:text-ink">
                   Services
                 </a>
               </li>
               <li>
-                <a href="#barbers" className="hover:text-zinc-100">
+                <a href="#barbers" className="hover:text-ink">
                   Barbers
                 </a>
               </li>
               <li>
-                <a href="#hours" className="hover:text-zinc-100">
+                <a href="#hours" className="hover:text-ink">
                   Hours
                 </a>
               </li>
@@ -302,29 +302,29 @@ export default async function MarketingHomePage() {
           </div>
           <div>
             <h3 className="text-sm font-medium">Contact</h3>
-            <ul className="mt-3 space-y-2 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-bark">
               <li>+60 3-2200 0000</li>
               <li>hello@fadeandco.example</li>
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-medium">Legal</h3>
-            <ul className="mt-3 space-y-2 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-bark">
               <li>
-                <a href="#" className="hover:text-zinc-100">
+                <a href="#" className="hover:text-ink">
                   Privacy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-zinc-100">
+                <a href="#" className="hover:text-ink">
                   Terms
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-zinc-800">
-          <p className="mx-auto max-w-5xl px-4 py-4 text-sm text-zinc-400">
+        <div className="border-t border-line">
+          <p className="mx-auto max-w-5xl px-4 py-4 text-sm text-bark">
             © 2026 Fade &amp; Co. A fictional barbershop built as a portfolio
             piece by Darvin Raj.
           </p>

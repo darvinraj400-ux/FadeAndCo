@@ -204,7 +204,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
         <Button
           type="button"
           onClick={openNew}
-          className="bg-indigo-500 text-white hover:bg-indigo-400"
+          className="bg-brass text-ink hover:bg-brass/85"
         >
           Add service
         </Button>
@@ -212,45 +212,45 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
       {services.length === 0 ? (
         <p
           role="status"
-          className="rounded-2xl border border-zinc-800 px-4 py-8 text-center text-sm text-zinc-400"
+          className="rounded-2xl border border-cream/10 px-4 py-8 text-center text-sm text-cream/60"
         >
           No services yet.
         </p>
       ) : (
-      <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+      <div className="overflow-x-auto rounded-2xl border border-cream/10">
         <Table>
           <TableHeader>
-            <TableRow className="border-zinc-800 hover:bg-transparent">
-              <TableHead className="text-zinc-400">Name</TableHead>
-              <TableHead className="text-zinc-400">Slug</TableHead>
-              <TableHead className="text-zinc-400">Duration</TableHead>
-              <TableHead className="text-zinc-400">Price</TableHead>
-              <TableHead className="text-zinc-400">Active</TableHead>
-              <TableHead className="text-right text-zinc-400">
+            <TableRow className="border-cream/10 hover:bg-transparent">
+              <TableHead className="text-cream/60">Name</TableHead>
+              <TableHead className="text-cream/60">Slug</TableHead>
+              <TableHead className="text-cream/60">Duration</TableHead>
+              <TableHead className="text-cream/60">Price</TableHead>
+              <TableHead className="text-cream/60">Active</TableHead>
+              <TableHead className="text-right text-cream/60">
                 Actions
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {services.map((s) => (
-              <TableRow key={s.id} className="border-zinc-800">
-                <TableCell className="font-medium text-zinc-100">
+              <TableRow key={s.id} className="border-cream/10">
+                <TableCell className="font-medium text-cream">
                   {s.name}
                 </TableCell>
-                <TableCell className="font-mono text-xs text-zinc-400">
+                <TableCell className="font-mono text-xs text-cream/60">
                   {s.slug}
                 </TableCell>
-                <TableCell className="text-sm text-zinc-300">
+                <TableCell className="text-sm text-cream/70">
                   {s.durationMinutes} min
                 </TableCell>
-                <TableCell className="text-sm text-zinc-300">
+                <TableCell className="text-sm text-cream/70">
                   {s.priceLabel}
                 </TableCell>
                 <TableCell>
                   <button
                     type="button"
                     onClick={() => toggleActive(s)}
-                    className={`rounded-full border px-2.5 py-0.5 text-xs ${s.active ? "border-green-500/30 bg-green-500/15 text-green-300" : "border-zinc-700 text-zinc-400"}`}
+                    className={`rounded-full border px-2.5 py-0.5 text-xs ${s.active ? "border-moss/40 bg-moss/15 text-moss" : "border-cream/15 text-cream/60"}`}
                   >
                     {s.active ? "Active" : "Off"}
                   </button>
@@ -262,7 +262,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                       variant="outline"
                       size="sm"
                       onClick={() => openEdit(s)}
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                      className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
                     >
                       Edit
                     </Button>
@@ -271,7 +271,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                       variant="outline"
                       size="sm"
                       onClick={() => setDeleteTarget(s)}
-                      className="border-zinc-700 text-red-300 hover:bg-zinc-800"
+                      className="border-cream/15 bg-transparent text-ember hover:bg-cream/10"
                     >
                       Delete
                     </Button>
@@ -291,7 +291,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
           setDialogOpen(open);
         }}
       >
-        <DialogContent className="border-zinc-800 bg-zinc-900 text-zinc-100">
+        <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
             <DialogTitle>
               {editing ? "Edit service" : "Add service"}
@@ -304,7 +304,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-name"
                 value={form.name}
                 onChange={(e) => set("name", e.target.value)}
-                className="border-zinc-700 bg-zinc-950"
+                className="border-cream/15 bg-coal"
               />
             </div>
             <div className="grid gap-1.5">
@@ -313,7 +313,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-slug"
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value, slugTouched: true }))}
-                className="border-zinc-700 bg-zinc-950 font-mono text-sm"
+                className="border-cream/15 bg-coal font-mono text-sm"
               />
             </div>
             <div className="grid gap-1.5">
@@ -322,7 +322,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-desc"
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
-                className="border-zinc-700 bg-zinc-950"
+                className="border-cream/15 bg-coal"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -335,7 +335,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                   max={240}
                   value={form.durationMinutes}
                   onChange={(e) => set("durationMinutes", e.target.value)}
-                  className="border-zinc-700 bg-zinc-950"
+                  className="border-cream/15 bg-coal"
                 />
               </div>
               <div className="grid gap-1.5">
@@ -347,11 +347,11 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                   step="0.01"
                   value={form.priceDollars}
                   onChange={(e) => set("priceDollars", e.target.value)}
-                  className="border-zinc-700 bg-zinc-950"
+                  className="border-cream/15 bg-coal"
                 />
               </div>
             </div>
-            <label className="flex items-center gap-2 text-sm text-zinc-300">
+            <label className="flex items-center gap-2 text-sm text-cream/70">
               <input
                 type="checkbox"
                 checked={form.active}
@@ -365,7 +365,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
               type="button"
               onClick={handleSubmit}
               disabled={pending}
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-brass text-ink hover:bg-brass/85"
             >
               {pending ? "Saving…" : "Save"}
             </Button>
@@ -380,11 +380,11 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
           if (!open) setDeleteTarget(null);
         }}
       >
-        <DialogContent className="border-zinc-800 bg-zinc-900 text-zinc-100">
+        <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
             <DialogTitle>Delete {deleteTarget?.name}?</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-cream/60">
             This cannot be undone. Services with future appointments cannot be
             deleted — deactivate them instead.
           </p>
@@ -393,7 +393,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
               type="button"
               variant="outline"
               onClick={() => setDeleteTarget(null)}
-              className="border-zinc-700 text-zinc-300"
+              className="border-cream/15 text-cream/70"
             >
               Keep
             </Button>
@@ -401,7 +401,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
               type="button"
               onClick={handleDelete}
               disabled={pending}
-              className="bg-red-600 text-white hover:bg-red-500"
+              className="bg-brick text-cream hover:bg-brick/85"
             >
               {pending ? "Deleting…" : "Delete"}
             </Button>

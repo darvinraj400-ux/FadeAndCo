@@ -52,7 +52,7 @@ export function BookPageClient() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
+      <div className="rounded-2xl border border-line bg-parchment p-5">
         <NlBookingInput onParsed={handleParsed} />
         {lastResult ? (
           <div className="mt-4">
@@ -64,10 +64,10 @@ export function BookPageClient() {
           </div>
         ) : null}
       </div>
-      <div className="flex items-center gap-3 text-sm text-zinc-500">
-        <span className="h-px flex-1 bg-zinc-800" />
+      <div className="flex items-center gap-3 text-sm text-bark">
+        <span className="h-px flex-1 bg-line" />
         or pick step by step
-        <span className="h-px flex-1 bg-zinc-800" />
+        <span className="h-px flex-1 bg-line" />
       </div>
       <BookingFlow nlPrefill={nlPrefill} />
     </div>

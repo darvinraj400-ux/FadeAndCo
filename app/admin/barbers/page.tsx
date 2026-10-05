@@ -80,10 +80,10 @@ export default async function AdminBarbersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-white">
+        <h1 className="font-display text-3xl tracking-tight text-cream">
           Barbers
         </h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <p className="mt-1 text-sm text-cream/60">
           {rows.length} barbers · services and weekly hours per barber
         </p>
       </div>

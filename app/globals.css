@@ -4,6 +4,31 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-display: var(--font-display-serif), Georgia, "Times New Roman", serif;
+
+  /* Palette roles: bone = storefront page base, parchment = storefront cards,
+     paper = popovers/dialogs on cream, ink/bark = text, brass = fills (dark
+     text on top), bronze = accent text, line = borders, brick = destructive,
+     coal = admin base, cream = admin text (= bone value, separate name so
+     each wing reads independently), panel = raised admin surfaces,
+     ember = warm alert text on coal, moss = warm success on coal. */
+  --color-bone: #f6f1e7;
+  --color-parchment: #ede4d3;
+  --color-paper: #faf6ed;
+  --color-ink: #211812;
+  --color-bark: #6f5f4e;
+  --color-brass: #c99a3c;
+  --color-bronze: #7a5a1e;
+  --color-line: #dcd2be;
+  --color-brick: #a63e2a;
+  --color-coal: #1a120b;
+  --color-cream: #f6f1e7;
+  --color-panel: #241a10;
+  --color-ember: #e0977f;
+  --color-moss: #93a86e;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,24 +74,24 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: #f6f1e7;
+  --foreground: #211812;
+  --card: #efe6d2;
+  --card-foreground: #211812;
+  --popover: #faf6ed;
+  --popover-foreground: #211812;
+  --primary: #c99a3c;
+  --primary-foreground: #211812;
+  --secondary: #ede4d3;
+  --secondary-foreground: #211812;
+  --muted: #ece1cb;
+  --muted-foreground: #6f5f4e;
+  --accent: #e7d9bd;
+  --accent-foreground: #211812;
+  --destructive: #a63e2a;
+  --border: #dcd2be;
+  --input: #d3c5a9;
+  --ring: #7a5a1e;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -84,24 +109,24 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #1a120b;
+  --foreground: #f6f1e7;
+  --card: #241a10;
+  --card-foreground: #f6f1e7;
+  --popover: #241a10;
+  --popover-foreground: #f6f1e7;
+  --primary: #c99a3c;
+  --primary-foreground: #211812;
+  --secondary: #2b2114;
+  --secondary-foreground: #f6f1e7;
+  --muted: #2b2114;
+  --muted-foreground: #b3a48d;
+  --accent: #2b2114;
+  --accent-foreground: #f6f1e7;
+  --destructive: #e0977f;
+  --border: rgb(246 241 231 / 12%);
+  --input: rgb(246 241 231 / 18%);
+  --ring: #c99a3c;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -126,5 +151,13 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Native date/time/select indicators follow the admin's dark context. */
+  .admin-dark,
+  .admin-dark select,
+  .admin-dark input[type="date"],
+  .admin-dark input[type="time"],
+  .admin-dark input[type="datetime-local"] {
+    color-scheme: dark;
   }
 }

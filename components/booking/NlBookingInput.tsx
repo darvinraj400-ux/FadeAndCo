@@ -76,7 +76,7 @@ export function NlBookingInput({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-zinc-400">
+      <p className="text-sm text-bark">
         Not sure where to start? Describe what you want and we&apos;ll figure
         it out. Try: &ldquo;a fade with Sam on Saturday afternoon&rdquo;
       </p>

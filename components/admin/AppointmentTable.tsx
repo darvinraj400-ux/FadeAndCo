@@ -85,7 +85,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
 
   if (bookings.length === 0) {
     return (
-      <p className="text-sm text-zinc-400">
+      <p className="text-sm text-cream/60">
         No appointments match these filters.
       </p>
     );
@@ -93,39 +93,39 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+      <div className="overflow-x-auto rounded-2xl border border-cream/10">
         <Table>
           <TableHeader>
-            <TableRow className="border-zinc-800 hover:bg-transparent">
-              <TableHead className="text-zinc-400">Reference</TableHead>
-              <TableHead className="text-zinc-400">When</TableHead>
-              <TableHead className="text-zinc-400">Customer</TableHead>
-              <TableHead className="text-zinc-400">Barber</TableHead>
-              <TableHead className="text-zinc-400">Service</TableHead>
-              <TableHead className="text-zinc-400">Status</TableHead>
+            <TableRow className="border-cream/10 hover:bg-transparent">
+              <TableHead className="text-cream/60">Reference</TableHead>
+              <TableHead className="text-cream/60">When</TableHead>
+              <TableHead className="text-cream/60">Customer</TableHead>
+              <TableHead className="text-cream/60">Barber</TableHead>
+              <TableHead className="text-cream/60">Service</TableHead>
+              <TableHead className="text-cream/60">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bookings.map((b) => (
               <TableRow
                 key={b.id}
-                className="cursor-pointer border-zinc-800 hover:bg-zinc-900"
+                className="cursor-pointer border-cream/10 hover:bg-cream/5"
                 onClick={() => setSelectedId(b.id)}
               >
-                <TableCell className="font-mono text-xs text-zinc-300">
+                <TableCell className="font-mono text-xs text-cream/70">
                   {b.referenceCode}
                 </TableCell>
-                <TableCell className="text-sm text-zinc-300">
+                <TableCell className="text-sm text-cream/70">
                   {b.dateLabel} · {b.startLabel} – {b.endLabel}
                 </TableCell>
                 <TableCell>
-                  <p className="text-sm text-zinc-100">{b.customerName}</p>
-                  <p className="text-xs text-zinc-400">{b.customerEmail}</p>
+                  <p className="text-sm text-cream">{b.customerName}</p>
+                  <p className="text-xs text-cream/60">{b.customerEmail}</p>
                 </TableCell>
-                <TableCell className="text-sm text-zinc-300">
+                <TableCell className="text-sm text-cream/70">
                   {b.barberName}
                 </TableCell>
-                <TableCell className="text-sm text-zinc-300">
+                <TableCell className="text-sm text-cream/70">
                   {b.serviceName}
                 </TableCell>
                 <TableCell>
@@ -144,12 +144,12 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
           if (!open) setSelectedId(null);
         }}
       >
-        <DialogContent className="border-zinc-800 bg-zinc-900 text-zinc-100">
+        <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
             <DialogTitle className="font-mono text-sm">
               {selected?.referenceCode}
             </DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-cream/60">
               {selected?.dateLabel} · {selected?.startLabel} –{" "}
               {selected?.endLabel}
             </DialogDescription>
@@ -157,31 +157,31 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
           {selected ? (
             <div className="space-y-2 text-sm">
               <p>
-                <span className="text-zinc-400">Customer: </span>
+                <span className="text-cream/60">Customer: </span>
                 {selected.customerName}
               </p>
               <p>
-                <span className="text-zinc-400">Email: </span>
+                <span className="text-cream/60">Email: </span>
                 <a
                   href={`mailto:${selected.customerEmail}`}
-                  className="text-indigo-400 hover:text-indigo-300"
+                  className="text-brass hover:text-cream"
                 >
                   {selected.customerEmail}
                 </a>
               </p>
               {selected.customerPhone ? (
                 <p>
-                  <span className="text-zinc-400">Phone: </span>
+                  <span className="text-cream/60">Phone: </span>
                   {selected.customerPhone}
                 </p>
               ) : null}
               <p>
-                <span className="text-zinc-400">Barber: </span>
+                <span className="text-cream/60">Barber: </span>
                 {selected.barberName} · {selected.serviceName}
               </p>
               {selected.notes ? (
                 <p>
-                  <span className="text-zinc-400">Notes: </span>
+                  <span className="text-cream/60">Notes: </span>
                   {selected.notes}
                 </p>
               ) : null}
@@ -200,7 +200,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
                   size="sm"
                   disabled={pending}
                   onClick={() => setStatus(selected.id, a.status)}
-                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                  className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
                 >
                   {a.label}
                 </Button>

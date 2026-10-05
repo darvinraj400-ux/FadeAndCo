@@ -15,21 +15,21 @@ export default function AdminError({
 
   return (
     <div className="py-16 text-center">
-      <h1 className="text-2xl font-semibold text-white">
+      <h1 className="font-display text-3xl tracking-tight text-cream">
         Something went wrong
       </h1>
-      <p className="mt-2 text-sm text-zinc-400">
+      <p className="mt-2 text-sm text-cream/60">
         The admin view failed to load. Your data is safe — try again.
       </p>
       {error.digest ? (
-        <p className="mt-2 font-mono text-xs text-zinc-500">
+        <p className="mt-2 font-mono text-xs text-cream/40">
           Reference: {error.digest}
         </p>
       ) : null}
       <button
         type="button"
         onClick={() => reset()}
-        className="mt-4 rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-200 hover:border-zinc-500"
+        className="mt-4 rounded-lg border border-cream/15 px-4 py-2 text-sm text-cream hover:border-brass"
       >
         Try again
       </button>

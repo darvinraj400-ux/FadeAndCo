@@ -133,10 +133,10 @@ export default async function AdminAppointmentsPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="font-display text-3xl tracking-tight text-cream">
             Appointments
           </h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-cream/60">
             {rows.length} shown · newest first · showing up to 100 — narrow
             filters for more
           </p>
@@ -144,7 +144,7 @@ export default async function AdminAppointmentsPage({
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <Link
             href={filterHref(query, { status: null })}
-            className={`rounded-lg border px-3 py-1.5 ${!status ? "border-indigo-500 bg-indigo-500/15 text-indigo-300" : "border-zinc-700 text-zinc-300 hover:border-zinc-500"}`}
+            className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass ${!status ? "border-brass/50 bg-brass/15 text-brass" : "border-cream/15 text-cream/70 hover:border-brass"}`}
           >
             All
           </Link>
@@ -152,7 +152,7 @@ export default async function AdminAppointmentsPage({
             <Link
               key={s}
               href={filterHref(query, { status: s })}
-              className={`rounded-lg border px-3 py-1.5 capitalize ${status === s ? "border-indigo-500 bg-indigo-500/15 text-indigo-300" : "border-zinc-700 text-zinc-300 hover:border-zinc-500"}`}
+              className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass capitalize ${status === s ? "border-brass/50 bg-brass/15 text-brass" : "border-cream/15 text-cream/70 hover:border-brass"}`}
             >
               {s === "no_show" ? "No-show" : s}
             </Link>
@@ -166,12 +166,12 @@ export default async function AdminAppointmentsPage({
         className="flex flex-wrap items-end gap-3"
       >
         {status ? <input type="hidden" name="status" value={status} /> : null}
-        <label className="grid gap-1 text-xs text-zinc-400">
+        <label className="grid gap-1 text-xs text-cream/60">
           Barber
           <select
             name="barberId"
             defaultValue={barberId ?? ""}
-            className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-100"
+            className="rounded-lg border border-cream/15 bg-panel px-3 py-1.5 text-sm text-cream"
           >
             <option value="">All barbers</option>
             {((barbers ?? []) as Array<{ id: string; name: string }>).map(
@@ -183,24 +183,24 @@ export default async function AdminAppointmentsPage({
             )}
           </select>
         </label>
-        <label className="grid gap-1 text-xs text-zinc-400">
+        <label className="grid gap-1 text-xs text-cream/60">
           Day
           <input
             type="date"
             name="date"
             defaultValue={dateValue}
-            className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-100"
+            className="rounded-lg border border-cream/15 bg-panel px-3 py-1.5 text-sm text-cream"
           />
         </label>
         <button
           type="submit"
-          className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white"
+          className="rounded-lg border border-cream/15 px-3 py-1.5 text-sm text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
         >
           Filter
         </button>
         <Link
           href="/admin/appointments"
-          className="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white"
+          className="rounded-lg border border-cream/15 px-3 py-1.5 text-sm text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
         >
           Clear
         </Link>

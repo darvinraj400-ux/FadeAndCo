@@ -15,7 +15,9 @@ export default function Error({
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-16">
-      <h1 className="text-2xl font-semibold">Something went wrong</h1>
+      <h1 className="font-display text-3xl tracking-tight">
+        Something went wrong
+      </h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Please try again. If the problem persists, contact the shop.
       </p>
@@ -27,7 +29,7 @@ export default function Error({
       <button
         type="button"
         onClick={() => reset()}
-        className="mt-4 rounded-lg border border-zinc-700 px-4 py-2 text-sm hover:border-zinc-500"
+        className="mt-4 rounded-lg border border-line px-4 py-2 text-sm hover:border-bronze"
       >
         Try again
       </button>

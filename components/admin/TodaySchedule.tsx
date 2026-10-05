@@ -50,17 +50,17 @@ export function TodaySchedule({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
+          <h1 className="font-display text-3xl tracking-tight text-cream md:text-4xl">
             Today — {dateLabel}
           </h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-cream/60">
             {count} appointment{count === 1 ? "" : "s"} · shop local (
             {tzAbbrev})
           </p>
           {count === 0 ? (
             <p
               role="status"
-              className="mt-3 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-sm text-zinc-400"
+              className="mt-3 rounded-lg border border-cream/10 bg-panel px-4 py-3 text-sm text-cream/60"
             >
               No appointments today.
             </p>
@@ -69,19 +69,19 @@ export function TodaySchedule({
         <div className="flex items-center gap-2 text-sm">
           <Link
             href={prevHref}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-zinc-300 hover:border-zinc-500 hover:text-white"
+            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
           >
             ← Prev
           </Link>
           <Link
             href={todayHref}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-zinc-300 hover:border-zinc-500 hover:text-white"
+            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
           >
             Today
           </Link>
           <Link
             href={nextHref}
-            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-zinc-300 hover:border-zinc-500 hover:text-white"
+            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
           >
             Next →
           </Link>
@@ -92,33 +92,33 @@ export function TodaySchedule({
         {days.map((d) => (
           <Card
             key={d.barber.id}
-            className="border-zinc-800 bg-zinc-900/50 p-4"
+            className="border-cream/10 bg-panel p-4"
           >
             <div className="flex items-baseline justify-between gap-2">
-              <h2 className="font-serif text-lg text-white">
+              <h2 className="font-display text-xl text-cream">
                 {d.barber.name}
               </h2>
-              <span className="text-xs text-zinc-400">
+              <span className="text-xs text-cream/60">
                 {d.working
                   ? `Today: ${d.blocks.length} appointment${d.blocks.length === 1 ? "" : "s"}`
                   : "Not working today"}
               </span>
             </div>
             {d.hoursLabel ? (
-              <p className="mt-0.5 text-xs text-zinc-500">{d.hoursLabel}</p>
+              <p className="mt-0.5 text-xs text-cream/40">{d.hoursLabel}</p>
             ) : null}
 
             <div className="mt-3 space-y-2">
               {!d.working ? (
-                <p className="text-sm text-zinc-500">Not working today.</p>
+                <p className="text-sm text-cream/40">Not working today.</p>
               ) : (
                 <>
                   {d.timeOff.map((t) => (
                     <div
                       key={t.id}
-                      className="rounded-lg border border-dashed border-zinc-700 bg-zinc-800/40 px-3 py-2"
+                      className="rounded-lg border border-dashed border-cream/15 bg-cream/5 px-3 py-2"
                     >
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-cream/60">
                         Off · {t.startLabel} – {t.endLabel}
                         {t.reason ? ` · ${t.reason}` : ""}
                       </p>
@@ -127,30 +127,30 @@ export function TodaySchedule({
                   {d.blocks.map((b) => (
                     <div
                       key={b.id}
-                      className="rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 py-2"
+                      className="rounded-lg border border-cream/15 bg-cream/5 px-3 py-2"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-zinc-400">
+                        <span className="text-xs text-cream/60">
                           {b.startLabel} – {b.endLabel}
                         </span>
                         <StatusBadge status={b.status} />
                       </div>
-                      <p className="mt-1 text-sm font-medium text-zinc-100">
+                      <p className="mt-1 text-sm font-medium text-cream">
                         {b.customerName}
                       </p>
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-cream/60">
                         {b.serviceName} · {b.durationMinutes} min
                       </p>
                     </div>
                   ))}
                   {d.blocks.length === 0 && d.timeOff.length === 0 ? (
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm text-cream/40">
                       No appointments — wide open.
                     </p>
                   ) : null}
                   {d.freeLabels.length > 0 ? (
-                    <div className="rounded-lg border border-zinc-800 px-3 py-2">
-                      <p className="text-xs text-zinc-500">
+                    <div className="rounded-lg border border-cream/10 px-3 py-2">
+                      <p className="text-xs text-cream/40">
                         Free windows (30-min probe):{" "}
                         {d.freeLabels.join(", ")}
                         {d.freeMore > 0 ? ` +${d.freeMore} more` : ""}
@@ -161,10 +161,10 @@ export function TodaySchedule({
               )}
             </div>
 
-            <div className="mt-3 border-t border-zinc-800 pt-2">
+            <div className="mt-3 border-t border-cream/10 pt-2">
               <Link
                 href="/admin/appointments"
-                className="text-xs text-indigo-400 hover:text-indigo-300"
+                className="text-xs text-brass hover:text-cream"
               >
                 Add booking →
               </Link>

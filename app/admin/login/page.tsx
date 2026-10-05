@@ -43,16 +43,16 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <Card className="w-full max-w-sm border-zinc-800 bg-zinc-900">
+      <Card className="w-full max-w-sm border-cream/10 bg-panel">
         <CardHeader>
-          <CardTitle className="font-serif text-white">
+          <CardTitle className="font-display text-2xl text-cream">
             Fade &amp; Co. Admin
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="admin-password" className="text-zinc-300">
+              <Label htmlFor="admin-password" className="text-cream/70">
                 Password
               </Label>
               <Input
@@ -63,13 +63,13 @@ export default function AdminLoginPage() {
                 disabled={busy}
                 autoComplete="current-password"
                 autoFocus
-                className="border-zinc-700 bg-zinc-950 text-zinc-100"
+                className="border-cream/15 bg-coal text-cream"
               />
             </div>
             <Button
               type="submit"
               disabled={busy || !password}
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-brass text-ink hover:bg-brass/85"
             >
               {busy ? "Checking…" : "Log in"}
             </Button>
