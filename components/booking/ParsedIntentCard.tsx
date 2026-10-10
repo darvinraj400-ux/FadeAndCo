@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 import type {
   ParseCandidateSlot,
   ParseResult,
@@ -46,7 +47,7 @@ export function ParsedIntentCard({
           <p className="mt-2 text-sm text-bark">
             Service: {matchedService?.name}
             {matchedService
-              ? ` (${matchedService.duration_minutes} min, $${(matchedService.price_cents / 100).toFixed(0)})`
+              ? ` (${matchedService.duration_minutes} min, ${formatPrice(matchedService.price_cents)})`
               : ""}
             {matchedBarber ? ` · Barber: ${matchedBarber.name}` : ""}
           </p>

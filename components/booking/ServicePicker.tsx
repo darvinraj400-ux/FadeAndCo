@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export type ServiceOption = {
@@ -44,7 +45,7 @@ export function ServicePicker({
               <div className="flex items-baseline justify-between gap-2">
                 <span className="font-medium">{s.name}</span>
                 <span className="text-sm text-muted-foreground">
-                  ${(s.price_cents / 100).toFixed(0)}
+                  {formatPrice(s.price_cents)}
                 </span>
               </div>
               <p className="mt-1 text-sm text-muted-foreground">

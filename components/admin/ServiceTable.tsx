@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/table";
 import { slugify } from "@/lib/admin-schemas";
 
-// Parse a decimal dollar string to integer cents without float artifacts
+// Parse a decimal ringgit string to integer cents without float artifacts
 // ("19.99" -> 1999). Returns null when invalid or negative.
-function dollarsToCents(value: string): number | null {
+function ringgitToCents(value: string): number | null {
   const match = /^(\d+)(?:\.(\d{1,2}))?$/.exec(value.trim());
   if (!match) return null;
   return Number(match[1]) * 100 + Number((match[2] ?? "0").padEnd(2, "0"));
@@ -49,7 +49,7 @@ type FormState = {
   slugTouched: boolean;
   description: string;
   durationMinutes: string;
-  priceDollars: string;
+  priceRinggit: string;
   active: boolean;
 };
 
@@ -59,7 +59,7 @@ const EMPTY_FORM: FormState = {
   slugTouched: false,
   description: "",
   durationMinutes: "30",
-  priceDollars: "30",
+  priceRinggit: "30",
   active: true,
 };
 
@@ -85,7 +85,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
       slugTouched: true,
       description: s.description ?? "",
       durationMinutes: String(s.durationMinutes),
-      priceDollars: (s.priceCents / 100).toFixed(2),
+      priceRinggit: (s.priceCents / 100).toFixed(2),
       active: s.active,
     });
     setDialogOpen(true);
@@ -102,7 +102,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
 
   async function handleSubmit() {
     const duration = Number.parseInt(form.durationMinutes, 10);
-    const cents = dollarsToCents(form.priceDollars);
+    const cents = ringgitToCents(form.priceRinggit);
     if (!form.name.trim() || !form.slug.trim()) {
       toast.error("Name and slug are required.");
       return;
@@ -339,14 +339,14 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 />
               </div>
               <div className="grid gap-1.5">
-                <Label htmlFor="svc-price">Price ($)</Label>
+                <Label htmlFor="svc-price">Price (RM)</Label>
                 <Input
                   id="svc-price"
                   type="number"
                   min={0}
                   step="0.01"
-                  value={form.priceDollars}
-                  onChange={(e) => set("priceDollars", e.target.value)}
+                  value={form.priceRinggit}
+                  onChange={(e) => set("priceRinggit", e.target.value)}
                   className="border-cream/15 bg-coal"
                 />
               </div>

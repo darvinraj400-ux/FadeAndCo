@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { formatPrice } from "@/lib/format";
 import type { BarberOption } from "@/components/booking/BarberPicker";
 import type { ServiceOption } from "@/components/booking/ServicePicker";
 import type { SlotItem } from "@/components/booking/SlotPicker";
@@ -49,8 +50,8 @@ export function ConfirmStep({
         <dl className="grid grid-cols-2 gap-2 text-sm">
           <dt className="text-muted-foreground">Service</dt>
           <dd>
-            {service.name} · {service.duration_minutes} min · $
-            {(service.price_cents / 100).toFixed(0)}
+            {service.name} · {service.duration_minutes} min ·{" "}
+            {formatPrice(service.price_cents)}
           </dd>
           <dt className="text-muted-foreground">Barber</dt>
           <dd>{barber.name}</dd>

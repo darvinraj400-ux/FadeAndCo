@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase";
+import { formatPrice } from "@/lib/format";
+import { BarberChairIcon } from "@/components/marketing/BarberChairIcon";
 import { SiteHeader } from "@/components/marketing/SiteHeader";
 import { Reveal } from "@/components/marketing/Reveal";
 import { FaqSection } from "@/components/marketing/FaqSection";
@@ -94,39 +96,6 @@ function Star() {
       className="text-brass"
     >
       <path d="M12 2l2.9 6.26 6.6.56-5 4.36 1.5 6.45L12 16.9 5.99 19.63l1.5-6.45-5-4.36 6.6-.56L12 2z" />
-    </svg>
-  );
-}
-
-function BarberChair() {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      aria-hidden="true"
-      className="h-40 w-40 text-brass opacity-30"
-    >
-      {/* headrest */}
-      <rect x="118" y="18" width="26" height="12" rx="4" />
-      {/* backrest */}
-      <rect x="116" y="32" width="30" height="62" rx="8" />
-      {/* seat */}
-      <rect x="66" y="94" width="80" height="18" rx="9" />
-      {/* armrest */}
-      <path d="M72 94 V74 H104" />
-      <path d="M72 82 H96" />
-      {/* hydraulic column */}
-      <path d="M106 112 V142" />
-      <path d="M98 126 H114" />
-      {/* round base */}
-      <ellipse cx="106" cy="152" rx="30" ry="8" />
-      {/* footrest */}
-      <path d="M146 104 L168 128 M160 128 H176" />
-      {/* floor line */}
-      <path d="M40 168 H160" />
     </svg>
   );
 }
@@ -240,7 +209,7 @@ export default async function MarketingHomePage() {
               <div className="flex items-baseline justify-between gap-2">
                 <h3 className="font-medium">{s.name}</h3>
                 <span className="font-mono text-sm text-bark">
-                  ${(s.price_cents / 100).toFixed(0)}
+                  {formatPrice(s.price_cents)}
                 </span>
               </div>
               <p className="mt-1 text-sm text-bark">
@@ -297,12 +266,13 @@ export default async function MarketingHomePage() {
           {["Chair one", "Chair two", "Chair three"].map((label) => (
             <div
               key={label}
-              className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-line bg-parchment"
+              className="flex aspect-[4/3] flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line bg-parchment p-4"
             >
-              <span className="text-sm text-bark">{label}</span>
-              <span className="font-mono text-xs text-bark">
-                Photos — Phase 2
-              </span>
+              <BarberChairIcon
+                className="h-24 w-24"
+                opacity="opacity-40"
+              />
+              <span className="font-mono text-xs text-bark">{label}</span>
             </div>
           ))}
         </div>
@@ -340,7 +310,7 @@ export default async function MarketingHomePage() {
               </div>
             </div>
             <div className="flex aspect-square items-center justify-center rounded-2xl border border-line bg-parchment">
-              <BarberChair />
+              <BarberChairIcon className="h-40 w-40" />
             </div>
           </div>
         </section>

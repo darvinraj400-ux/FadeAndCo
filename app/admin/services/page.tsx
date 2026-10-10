@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase";
+import { formatPrice } from "@/lib/format";
 import { ServiceTable, type ServiceRow } from "@/components/admin/ServiceTable";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export default async function AdminServicesPage() {
     description: s.description,
     durationMinutes: s.duration_minutes,
     priceCents: s.price_cents,
-    priceLabel: `$${(s.price_cents / 100).toFixed(2)}`,
+    priceLabel: formatPrice(s.price_cents),
     active: s.active,
   }));
 
