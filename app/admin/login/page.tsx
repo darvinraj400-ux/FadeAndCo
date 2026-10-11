@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -32,8 +30,12 @@ export default function AdminLoginPage() {
         setPassword("");
         return;
       }
-      router.push("/admin");
-      router.refresh();
+      // Hard navigation. /admin is gated by middleware on the fade_admin
+      // cookie this request just set. A soft router transition did not
+      // reliably land there — the URL stayed on /admin/login — whereas a
+      // document request re-runs middleware with the cookie in hand and
+      // leaves no pre-auth RSC payload in the client router cache.
+      window.location.href = "/admin";
     } catch {
       toast.error("Could not log in. Try again.");
     } finally {

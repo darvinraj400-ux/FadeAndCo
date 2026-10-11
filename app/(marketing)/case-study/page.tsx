@@ -415,7 +415,6 @@ PASS`}
         src="/case-study/booking-flow.png"
         width={1728}
         height={608}
-        layout="narrow"
         alt="Booking wizard on the barber step, progress indicator showing completed, current, and upcoming"
         caption="Four steps, slide transitions, brass progress."
       />
