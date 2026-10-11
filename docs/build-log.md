@@ -2,6 +2,70 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-11 — Barbershop layers 1 + 2: structure, then visual craft
+
+**Layer 1** (`b445e3c`, `dd3985a`): marketing page re-sectioned around real
+content — announcement bar, About, testimonials, location + hours, FAQ, footer.
+Currency to `RM`, OpenStreetMap embed replacing the dead map, gallery and
+portrait placeholders stubbed in.
+
+**Layer 2**: the visual pass over that structure. Existing section order kept.
+
+- `components/marketing/Hero.tsx` — full-viewport photograph, layered dark
+  overlays, left-aligned content, 30 %-speed scroll parallax. The image
+  translates *downward* only, so its bottom edge always clears the hero and
+  the only gap opens at an edge that has already scrolled off; `scale-[1.08]`
+  softens the move rather than hiding edges. No-op under
+  `prefers-reduced-motion`.
+- Real photography, eight distinct Unsplash sources, optimised locally with
+  sharp to WebP q78 **and** JPEG q82 (hero 76 KB, everything else ≤ 150 KB,
+  budgets 500/300 KB). Sources and licences in `public/CREDITS.md`; originals
+  not committed. `components/marketing/Photo.tsx` serves the below-fold images
+  through `<picture>` for a genuine JPEG fallback with intrinsic dimensions,
+  so there is no CLS. Hero stays on `next/image` + `priority` because it is the
+  LCP element.
+- Services are a two-column printed menu (dotted leaders, `POPULAR` badge).
+  Column split is positional (`slice`), not a slug allow-list — a filter would
+  have silently hidden any service an admin added later.
+- Barbers get real portraits, roles, service pills and booking links, with an
+  initials fallback so an admin-created barber cannot 404 the card.
+- Gallery is the three real photographs, sharp corners, captions on hover,
+  opening full size in a new tab.
+- About and Reviews share one dark chapter; About's interior photo is a square
+  frame offset down-right. Hours now show all seven days, condensed to five in
+  the footer from the same `OPENING_HOURS` constant so the two cannot drift.
+- Announcement bar moved to dark to sit above the hero, and says "Open 7 days"
+  to match the hours table.
+
+**Bugs found and fixed during review**, worth recording because both were
+introduced by this layer:
+
+- `Reveal` hid content on mount and relied on `IntersectionObserver` to show
+  it again. An element outside the viewport when the observer is created never
+  fires, so a deep link (`/#faq`) or a reload that restores scroll left whole
+  sections — and, briefly, the whole footer — stuck at `opacity: 0`. Both
+  `Reveal` and `AboutPhoto` now decide the already-visible case from
+  `getBoundingClientRect()` before hiding. Covered by three deep-link checks.
+- The hero photograph and Sam's portrait were initially the same source. All
+  eight images are now distinct; a check asserts hero ≠ any portrait.
+
+**Verification.** `tsc --noEmit`, `eslint`, `next build` all clean. 43-check
+Playwright suite against the production build: parallax (30 px at 100 px
+scroll, no edge at 600 px), 20 px reveal offset, all eight images 200, JPEG
+fallbacks wired and serving, hero ≠ Sam, dark announcement, square About
+frame, seven-day + condensed hours, mobile 375 px without horizontal
+overflow, reduced-motion, deep links, zero console errors. LCP 888 ms.
+First Load JS 109 kB → 115 kB; `/` route JS 4.18 kB. Code and security
+reviews run; no blockers outstanding. Security fixes taken: OSM iframe
+`referrerPolicy` tightened to `no-referrer`, `encodeURIComponent` on the
+booking query param, and `Photo` validates its name as a path segment.
+
+**Deferred to a later layer** (found in review, not regressions): the project
+sets no security response headers at all (no CSP/`nosniff`/`frame-ancestors`);
+`/book?barber=` is not yet read by the booking flow; hours are static copy
+rather than derived from `fade_barber_hours`; `<picture>` ships single-size
+files so below-fold images are larger than they need to be on mobile.
+
 ## 2026-10-05 — Layer 6B: case study page
 
 - `app/(marketing)/case-study/page.tsx` replaces the stub: warm-cream

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase";
 import { formatPrice } from "@/lib/format";
-import { BarberChairIcon } from "@/components/marketing/BarberChairIcon";
 import { SiteHeader } from "@/components/marketing/SiteHeader";
 import { Reveal } from "@/components/marketing/Reveal";
 import { FaqSection } from "@/components/marketing/FaqSection";
+import { Hero } from "@/components/marketing/Hero";
+import { AboutPhoto } from "@/components/marketing/AboutPhoto";
+import { Photo } from "@/components/marketing/Photo";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +60,31 @@ const TESTIMONIALS = [
   },
 ];
 
+// Opening hours, shown in full in the location table and condensed in the
+// footer. Static marketing copy that matches scripts/seed-demo.ts as of the
+// Phase 2 build — it is deliberately not read from fade_barber_hours, so an
+// admin hours edit will not propagate here until this is rewired.
+// [day, time]
+const OPENING_HOURS: ReadonlyArray<readonly [string, string]> = [
+  ["Monday", "10:00–18:00"],
+  ["Tuesday", "09:00–18:00"],
+  ["Wednesday", "09:00–19:00"],
+  ["Thursday", "09:00–19:00"],
+  ["Friday", "09:00–19:00"],
+  ["Saturday", "09:00–19:00"],
+  ["Sunday", "11:00–19:00"],
+];
+
+// The five condensed rows the footer shows. Labels are new; the times are read
+// from OPENING_HOURS so the two lists cannot drift apart.
+const FOOTER_HOURS: ReadonlyArray<readonly [string, string]> = [
+  ["MON", OPENING_HOURS[0][1]],
+  ["TUE", OPENING_HOURS[1][1]],
+  ["WED–FRI", OPENING_HOURS[2][1]],
+  ["SAT", OPENING_HOURS[5][1]],
+  ["SUN", OPENING_HOURS[6][1]],
+];
+
 const FAQ_ITEMS = [
   {
     q: "Do I need to book, or can I walk in?",
@@ -100,6 +127,70 @@ function Star() {
   );
 }
 
+function ServiceRow({ service }: { service: Service }) {
+  const popular = service.slug === "haircut-beard";
+  return (
+    <div className="group py-4 transition-transform duration-200 ease-out hover:translate-x-1 motion-reduce:transition-none motion-reduce:hover:translate-x-0">
+      <div className="flex items-baseline gap-3">
+        <h3 className="font-display text-2xl">
+          {service.name}
+          {popular ? (
+            <span className="ml-2 inline-block rounded-full bg-brass px-2 py-0.5 align-middle font-mono text-[10px] tracking-widest text-ink">
+              POPULAR
+            </span>
+          ) : null}
+        </h3>
+        <span
+          aria-hidden="true"
+          className="mx-1 flex-1 border-b border-solid border-bronze/40 md:border-dotted"
+        />
+        <span className="font-mono text-sm text-bark transition-colors group-hover:text-bronze">
+          {formatPrice(service.price_cents)}
+        </span>
+      </div>
+      <p className="mt-1 font-mono text-xs text-bark">
+        {service.duration_minutes} MIN
+      </p>
+      {service.description ? (
+        <p className="mt-0.5 text-sm text-bark">{service.description}</p>
+      ) : null}
+    </div>
+  );
+}
+
+const BARBER_ROLES: Record<string, string> = {
+  marcus: "OWNER",
+  priya: "CLASSIC CUTS",
+  sam: "FADES & MODERN",
+};
+
+// Slugs that have a real portrait in /public/images.
+const PORTRAIT_PHOTOS = new Set(["marcus", "priya", "sam"]);
+
+const GALLERY_SHOTS = [
+  {
+    name: "chair-1",
+    width: 900,
+    height: 1200,
+    alt: "Barber shaping a fade with clippers",
+    caption: "Fade · Marcus",
+  },
+  {
+    name: "chair-2",
+    width: 900,
+    height: 1200,
+    alt: "Close-up of a classic cut in progress",
+    caption: "Classic cut · Priya",
+  },
+  {
+    name: "chair-3",
+    width: 900,
+    height: 1200,
+    alt: "Barber tools laid out on the counter",
+    caption: "Tools of the trade",
+  },
+];
+
 export default async function MarketingHomePage() {
   const admin = createAdminClient();
   const [{ data: services }, { data: barbers }, { data: mappings }] =
@@ -123,6 +214,12 @@ export default async function MarketingHomePage() {
   const orderedServices = ((services ?? []) as Service[]).sort(
     (a, b) => orderOf(a.slug) - orderOf(b.slug)
   );
+  // Split the menu down the middle rather than filtering on a hardcoded slug
+  // allow-list: a filter would silently hide any service an admin adds later
+  // (it would still be bookable, just invisible on the pricing page).
+  const splitAt = Math.ceil(orderedServices.length / 2);
+  const leftServices = orderedServices.slice(0, splitAt);
+  const rightServices = orderedServices.slice(splitAt);
   const barberList = ((barbers ?? []) as Barber[]).filter(Boolean);
   const serviceNames = new Map(
     orderedServices.map((s) => [s.id, s.name] as [string, string])
@@ -143,232 +240,271 @@ export default async function MarketingHomePage() {
     <div id="top" tabIndex={-1} className="bg-bone text-ink">
       <SiteHeader />
 
-      {/* Hero */}
-      <section className="mx-auto max-w-5xl px-4 py-20 md:py-28">
-        <h1 className="font-display text-5xl tracking-tight md:text-7xl">
-          Sharp cuts, honest prices, no guesswork.
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg text-bark">
-          Fade &amp; Co. is a three-chair barbershop. Book online in under a
-          minute — or just tell us what you want and let the AI figure it out.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/book"
-            className="rounded-lg bg-brass px-5 py-2.5 text-sm font-medium text-ink hover:bg-brass/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
-          >
-            Book now
-          </Link>
-          <a
-            href="#services"
-            className="rounded-lg border border-line px-5 py-2.5 text-sm font-medium text-ink hover:border-bronze focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
-          >
-            See services
-          </a>
-        </div>
-        <p className="mt-6 text-sm text-bark">
-          Walk-ins welcome · Tue–Sun (shop local)
-        </p>
-      </section>
+      <Hero />
 
       {/* Trust strip */}
-      <div className="border-t border-brass bg-bone">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4 text-sm">
-          <span className="flex items-center gap-1.5">
-            <Star /> 4.9 · 120+ reviews
-          </span>
-          <span aria-hidden="true" className="text-line">
-            ·
-          </span>
-          <span>Bangsar, KL</span>
-          <span aria-hidden="true" className="text-line">
-            ·
-          </span>
-          <span>Est. 2018</span>
-          <span aria-hidden="true" className="text-line">
-            ·
-          </span>
-          <span>Walk-ins welcome</span>
-        </div>
-      </div>
-
-      {/* Services */}
-      <section
-        id="services"
-        className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
-      >
-        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
-          Services
-        </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {orderedServices.map((s) => (
-            <div
-              key={s.id}
-              className="rounded-2xl border border-line bg-parchment p-5"
-            >
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className="font-medium">{s.name}</h3>
-                <span className="font-mono text-sm text-bark">
-                  {formatPrice(s.price_cents)}
-                </span>
-              </div>
-              <p className="mt-1 text-sm text-bark">
-                {s.duration_minutes} min
-                {s.description ? ` · ${s.description}` : ""}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Barbers */}
-      <section
-        id="barbers"
-        className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
-      >
-        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
-          The chairs
-        </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {barberList.map((b) => (
-            <div
-              key={b.id}
-              className="rounded-2xl border border-line bg-parchment p-5"
-            >
-              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-brass/25 font-display text-4xl text-bronze">
-                {b.name.charAt(0)}
-              </div>
-              <h3 className="mt-3 font-display text-xl">{b.name}</h3>
-              {b.bio ? (
-                <p className="mt-1 text-sm text-bark">{b.bio}</p>
-              ) : null}
-              <p className="mt-2 text-sm text-bark">
-                {(servicesByBarber.get(b.id) ?? []).join(", ") ||
-                  "Ask us what this chair does best."}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Gallery — placeholder grid; real photography lands in Phase 2. */}
-      <section
-        id="gallery"
-        className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
-      >
-        <p className="font-mono text-xs tracking-widest text-bronze">
-          GALLERY
-        </p>
-        <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
-          The shop
-        </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          {["Chair one", "Chair two", "Chair three"].map((label) => (
-            <div
-              key={label}
-              className="flex aspect-[4/3] flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line bg-parchment p-4"
-            >
-              <BarberChairIcon
-                className="h-24 w-24"
-                opacity="opacity-40"
-              />
-              <span className="font-mono text-xs text-bark">{label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* About */}      <Reveal>
-        <section
-          id="about"
-          className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
-        >
-          <div className="grid gap-8 md:grid-cols-[3fr_2fr]">
-            <div>
-              <p className="font-mono text-xs tracking-widest text-bronze">
-                OUR STORY
-              </p>
-              <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
-                Three chairs. One street. Eight years of sharp.
-              </h2>
-              <div className="mt-4 max-w-[70ch] space-y-4 text-bark">
-                <p>
-                  Founded 2018 in a narrow shop on a Bangsar side street.
-                  Started with one chair and a standing agreement with the
-                  barber next door about which radio station to play.
-                </p>
-                <p>
-                  Grew to three chairs. Kept the radio argument. Kept the
-                  prices honest. Kept the walk-ins welcome.
-                </p>
-                <p>
-                  Today: three barbers, five services, and a booking system
-                  that actually respects your time. But the point is still the
-                  same — you come in, you sit down, you leave sharper than you
-                  walked in.
-                </p>
-              </div>
-            </div>
-            <div className="flex aspect-square items-center justify-center rounded-2xl border border-line bg-parchment">
-              <BarberChairIcon className="h-40 w-40" />
-            </div>
+      <Reveal>
+        <div className="border-y border-brass bg-black/90">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4 text-sm text-[#F4F0E8]">
+            <span className="flex items-center gap-1.5">
+              <Star /> 4.9 · 120+ reviews
+            </span>
+            <span aria-hidden="true" className="text-brass/60">
+              ·
+            </span>
+            <span>Bangsar, KL</span>
+            <span aria-hidden="true" className="text-brass/60">
+              ·
+            </span>
+            <span>Est. 2018</span>
+            <span aria-hidden="true" className="text-brass/60">
+              ·
+            </span>
+            <span>Walk-ins welcome</span>
           </div>
-        </section>
+        </div>
       </Reveal>
 
-      {/* Testimonials */}
+      {/* Services — printed menu */}
       <Reveal>
         <section
-          id="testimonials"
+          id="services"
           className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
         >
           <p className="font-mono text-xs tracking-widest text-bronze">
-            WHAT CUSTOMERS SAY
+            SERVICES &amp; PRICING
           </p>
           <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
-            Reviews
+            The menu.
           </h2>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
-              <figure
-                key={t.name}
-                className="rounded-xl border border-line bg-parchment p-5 shadow-[0_1px_2px_rgba(33,24,18,0.06)]"
-              >
-                <div
-                  className="flex gap-1"
-                  role="img"
-                  aria-label="5 out of 5 stars"
-                >
-                  <Star />
-                  <Star />
-                  <Star />
-                  <Star />
-                  <Star />
-                </div>
-                <blockquote className="mt-3 text-sm text-ink">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-3 font-mono text-xs text-bark">
-                  — {t.name}
-                </figcaption>
-              </figure>
-            ))}
+          <div className="mt-8 grid gap-x-12 gap-y-2 md:grid-cols-2">
+            <div>
+              {leftServices.map((s) => (
+                <ServiceRow key={s.id} service={s} />
+              ))}
+            </div>
+            <div>
+              {rightServices.map((s) => (
+                <ServiceRow key={s.id} service={s} />
+              ))}
+            </div>
           </div>
-          <p className="mt-4 text-sm text-bark">
-            Demo reviews — Fade &amp; Co. is a fictional shop.
-          </p>
         </section>
       </Reveal>
 
+      {/* Barbers */}
+      <Reveal>
+        <section
+          id="barbers"
+          className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
+        >
+          <p className="font-mono text-xs tracking-widest text-bronze">
+            THE CHAIRS
+          </p>
+          <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
+            Meet the barbers.
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {barberList.map((b, i) => (
+              <Reveal key={b.id} delayMs={i * 80} className="h-full">
+                <div className="flex h-full flex-col rounded-xl border border-line bg-parchment p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brass motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                  <div className="overflow-hidden rounded-xl">
+                    {PORTRAIT_PHOTOS.has(b.slug) ? (
+                      <Photo
+                        name={`barber-${b.slug}`}
+                        width={800}
+                        height={800}
+                        alt={`${b.name}, barber at Fade & Co.`}
+                        className="aspect-square w-full object-cover"
+                      />
+                    ) : (
+                      // No portrait on disk for a barber added through the
+                      // admin — fall back to initials instead of a 404 image.
+                      <div
+                        aria-hidden="true"
+                        className="flex aspect-square w-full items-center justify-center bg-parchment font-display text-6xl text-bronze"
+                      >
+                        {b.name.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="mt-4 font-display text-2xl">{b.name}</h3>
+                  <p className="mt-1 font-mono text-xs tracking-widest text-bronze">
+                    {BARBER_ROLES[b.slug] ?? "BARBER"}
+                  </p>
+                  {b.bio ? (
+                    <p className="mt-2 line-clamp-2 text-sm text-bark">
+                      {b.bio}
+                    </p>
+                  ) : null}
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {(servicesByBarber.get(b.id) ?? [])
+                      .slice(0, 3)
+                      .map((s) => (
+                        <span
+                          key={s}
+                          className="rounded-full border border-line px-2.5 py-0.5 text-xs text-bark"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                  </div>
+                  <Link
+                    href={`/book?barber=${encodeURIComponent(b.slug)}`}
+                    className="mt-3 text-sm font-medium text-bronze hover:text-ink focus-visible:outline-2 focus-visible:outline-bronze"
+                  >
+                    Book with {b.name} →
+                  </Link>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      {/* Gallery */}
+      <Reveal>
+        <section
+          id="gallery"
+          className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
+        >
+          <p className="font-mono text-xs tracking-widest text-bronze">
+            THE SHOP
+          </p>
+          <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
+            Recent work.
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {GALLERY_SHOTS.map((g) => (
+              <a
+                key={g.name}
+                href={`/images/${g.name}.jpg`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${g.alt} full size in a new tab`}
+                className="group relative block overflow-hidden rounded-none border border-brass/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
+              >
+                <Photo
+                  name={g.name}
+                  width={g.width}
+                  height={g.height}
+                  alt=""
+                  className="aspect-[3/4] w-full object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2 pt-8 font-mono text-xs text-[#F4F0E8] opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none"
+                >
+                  {g.caption}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      {/* About + Reviews — one dark chapter. */}
+      <div className="bg-[#111111] text-[#F4F0E8]">
+        {/* About */}
+        <Reveal>
+          <section
+            id="about"
+            className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
+          >
+            <div className="grid gap-8 md:grid-cols-[3fr_2fr]">
+              <div>
+                <p className="font-mono text-xs tracking-widest text-brass">
+                  OUR STORY
+                </p>
+                <h2 className="mt-2 font-display text-3xl tracking-tight text-[#F4F0E8] md:text-4xl">
+                  Three chairs. One street. Eight years of sharp.
+                </h2>
+                <div className="mt-4 max-w-[70ch] space-y-4 text-[#F4F0E8]/80">
+                  <p>
+                    Founded 2018 in a narrow shop on a Bangsar side street.
+                    Started with one chair and a standing agreement with the
+                    barber next door about which radio station to play.
+                  </p>
+                  <p>
+                    Grew to three chairs. Kept the radio argument. Kept the
+                    prices honest. Kept the walk-ins welcome.
+                  </p>
+                  <p>
+                    Today: three barbers, five services, and a booking system
+                    that actually respects your time. But the point is still the
+                    same — you come in, you sit down, you leave sharper than you
+                    walked in.
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="h-px flex-1 bg-brass"
+                  />
+                  <span className="font-mono text-xs tracking-widest text-brass">
+                    SINCE 2018
+                  </span>
+                </div>
+              </div>
+              <AboutPhoto />
+            </div>
+          </section>
+        </Reveal>
+
+        {/* Testimonials */}
+        <Reveal>
+          <section
+            id="testimonials"
+            className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
+          >
+            <p className="font-mono text-xs tracking-widest text-brass">
+              WHAT CUSTOMERS SAY
+            </p>
+            <h2 className="mt-2 font-display text-3xl tracking-tight text-[#F4F0E8] md:text-4xl">
+              Reviews
+            </h2>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {TESTIMONIALS.map((t, i) => (
+                <Reveal key={t.name} delayMs={i * 80} className="h-full">
+                  <figure className="h-full rounded-xl border border-[rgba(200,164,107,0.2)] bg-[#1a1a1a] p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brass/60 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                    <div
+                      className="flex gap-1"
+                      role="img"
+                      aria-label="5 out of 5 stars"
+                    >
+                      <Star />
+                      <Star />
+                      <Star />
+                      <Star />
+                      <Star />
+                    </div>
+                    <blockquote className="mt-3 font-display text-[1.125rem] italic text-[#F4F0E8]">
+                      &ldquo;{t.quote}&rdquo;
+                    </blockquote>
+                    <figcaption className="mt-3 font-mono text-xs text-[#F4F0E8]/60">
+                      — {t.name}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-[#F4F0E8]/50">
+              Demo reviews — Fade &amp; Co. is a fictional shop.
+            </p>
+          </section>
+        </Reveal>
+      </div>
+
       {/* Location & Hours.
-          Phase-1 tradeoff: the generic hours table below is static copy.
-          Per-barber availability still comes from fade_barber_hours and
-          drives the booking flow — rewire the display in Phase 2. */}
+          Hours are static marketing copy — see OPENING_HOURS. Per-barber
+          availability still comes from fade_barber_hours and drives the
+          booking flow. */}
       <Reveal>
         <section
           id="location"
           className="mx-auto max-w-5xl scroll-mt-20 px-4 py-20 md:py-28"
         >
+          <h2 className="sr-only">Find us &amp; hours</h2>
           <div className="grid gap-10 md:grid-cols-2">
             <div>
               <p className="font-mono text-xs tracking-widest text-bronze">
@@ -389,7 +525,7 @@ export default async function MarketingHomePage() {
                 href="https://www.openstreetmap.org/?mlat=3.1389&mlon=101.6711#map=17/3.1389/101.6711"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-block rounded-lg bg-brass px-5 py-2.5 text-sm font-medium text-ink hover:bg-brass/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
+                className="mt-4 inline-block rounded-lg bg-brass px-5 py-2.5 text-sm font-medium text-ink transition hover:brightness-110 hover:-translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
               >
                 Get directions
               </a>
@@ -400,18 +536,15 @@ export default async function MarketingHomePage() {
               </p>
               <table className="mt-2 w-full font-mono text-sm">
                 <tbody>
-                  <tr className="border-b border-line">
-                    <td className="py-2">TUE–SAT</td>
-                    <td className="py-2 text-right">09:00–19:00</td>
-                  </tr>
-                  <tr className="border-b border-line">
-                    <td className="py-2">SUN</td>
-                    <td className="py-2 text-right">11:00–19:00</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2">MON</td>
-                    <td className="py-2 text-right">Closed</td>
-                  </tr>
+                  {OPENING_HOURS.map(([day, time], i, arr) => (
+                    <tr
+                      key={day}
+                      className={i < arr.length - 1 ? "border-b border-line" : ""}
+                    >
+                      <td className="py-2 text-bronze">{day}</td>
+                      <td className="py-2 text-right">{time}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               <div className="mt-4 aspect-[4/3] overflow-hidden rounded-2xl border border-line md:aspect-[16/9]">
@@ -419,7 +552,7 @@ export default async function MarketingHomePage() {
                   title="Map — Fade & Co., Bangsar, Kuala Lumpur"
                   src="https://www.openstreetmap.org/export/embed.html?bbox=101.6600%2C3.1330%2C101.6820%2C3.1450&layer=mapnik&marker=3.1389%2C101.6711"
                   loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
+                  referrerPolicy="no-referrer"
                   className="h-full w-full border-0"
                 />
               </div>
@@ -433,7 +566,9 @@ export default async function MarketingHomePage() {
         <FaqSection items={FAQ_ITEMS} />
       </Reveal>
 
-      {/* Footer */}
+      {/* Footer — deliberately not wrapped in Reveal: it is the last element
+          on the page, so it gains nothing from an entrance, and a transform on
+          an ancestor would create a containing block for the whole footer. */}
       <footer className="border-t border-line">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
           <div>
@@ -496,9 +631,11 @@ export default async function MarketingHomePage() {
           <div>
             <h3 className="text-sm font-medium">Hours</h3>
             <ul className="mt-3 space-y-2 font-mono text-sm text-bark">
-              <li>TUE–SAT 09:00–19:00</li>
-              <li>SUN 11:00–19:00</li>
-              <li>MON Closed</li>
+              {FOOTER_HOURS.map(([label, time]) => (
+                <li key={label}>
+                  <span className="text-bronze">{label}</span> {time}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

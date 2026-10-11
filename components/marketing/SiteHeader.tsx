@@ -14,6 +14,9 @@ const LINKS = [
   { href: "/book", label: "Book" },
 ];
 
+const NAV_LINK_CLASS =
+  "relative py-1 hover:text-ink after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-brass after:transition-all after:duration-200 hover:after:w-full";
+
 export function SiteHeader() {
   const [dismissed, setDismissed] = useState(false);
   const [ready, setReady] = useState(false);
@@ -63,7 +66,7 @@ export function SiteHeader() {
     <>
       {ready ? (
         <div
-          className={`grid bg-bone transition-all duration-200 ease-out ${
+          className={`grid bg-black/90 transition-all duration-200 ease-out ${
             dismissed
               ? "invisible grid-rows-[0fr] opacity-0"
               : "grid-rows-[1fr] opacity-100"
@@ -71,18 +74,18 @@ export function SiteHeader() {
         >
           <div className="min-h-0 overflow-hidden">
             <div className="relative flex h-9 items-center justify-center border-l-2 border-brass px-4">
-              <p className="hidden font-mono text-xs text-bark sm:block">
-                Walk-ins welcome · Tue–Sun · 03-2288 XXXX
+              <p className="hidden font-mono text-xs text-[#F4F0E8]/85 sm:block">
+                Walk-ins welcome · Open 7 days · 03-2288 XXXX
               </p>
-              <p className="font-mono text-xs text-bark sm:hidden">
-                Walk-ins welcome · Tue–Sun
+              <p className="font-mono text-xs text-[#F4F0E8]/85 sm:hidden">
+                Walk-ins welcome · Open 7 days
               </p>
               <button
                 type="button"
                 onClick={dismiss}
                 aria-label="Dismiss announcement"
                 tabIndex={dismissed ? -1 : undefined}
-                className="absolute right-3 rounded p-1 text-bark hover:text-ink focus-visible:outline-2 focus-visible:outline-bronze"
+                className="absolute right-3 rounded p-2 text-[#F4F0E8]/70 hover:text-brass focus-visible:outline-2 focus-visible:outline-brass"
               >
                 <svg
                   width="12"
@@ -107,21 +110,11 @@ export function SiteHeader() {
             Fade &amp; Co.
           </Link>
           <div className="hidden items-center gap-6 text-sm text-bark sm:flex">
-            <a href="#services" className="hover:text-ink">
-              Services
-            </a>
-            <a href="#barbers" className="hover:text-ink">
-              Barbers
-            </a>
-            <a href="#gallery" className="hover:text-ink">
-              Gallery
-            </a>
-            <a href="#location" className="hover:text-ink">
-              Hours
-            </a>
-            <a href="/book" className="hover:text-ink">
-              Book
-            </a>
+            {LINKS.map((l) => (
+              <a key={l.href + l.label} href={l.href} className={NAV_LINK_CLASS}>
+                {l.label}
+              </a>
+            ))}
           </div>
           <div className="flex items-center gap-3">
             <a
@@ -132,7 +125,7 @@ export function SiteHeader() {
             </a>
             <Link
               href="/book"
-              className="rounded-lg bg-brass px-4 py-2 text-sm font-medium text-ink hover:bg-brass/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
+              className="rounded-lg bg-brass px-4 py-2 text-sm font-medium text-ink transition hover:brightness-110 hover:-translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bronze"
             >
               Book now
             </Link>
