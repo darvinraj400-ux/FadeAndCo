@@ -1,59 +1,52 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { Shot } from "@/components/marketing/case-study/Shot";
+import { Flow } from "@/components/marketing/case-study/Flow";
+import { Facts, type Fact } from "@/components/marketing/case-study/Facts";
 
 export const metadata: Metadata = {
   title: "Case study",
   description:
-    "How Fade & Co. was built: race-safe multi-barber scheduling with natural-language booking input.",
+    "How Fade & Co. was built: race-safe multi-barber scheduling, a deep-linkable booking flow, and an identity that doesn't look like a SaaS dashboard.",
 };
 
-const DEMO_URL = "https://fade-and-co-psi.vercel.app/";
+const DEMO_URL = "https://fade-and-co-psi.vercel.app";
 const REPO_URL = "https://github.com/darvinraj400-ux/FadeAndCo";
 const PROFILE_URL = "https://github.com/darvinraj400-ux";
 
-function Shot({
-  src,
-  width,
-  height,
-  alt,
-  caption,
-  priority = false,
-  compact = false,
-  scroll = false,
-}: {
-  src: string;
-  width: number;
-  height: number;
-  alt: string;
-  caption: string;
-  priority?: boolean;
-  compact?: boolean;
-  scroll?: boolean;
-}) {
-  return (
-    <figure className={compact ? "my-0" : "my-10"}>
-      <div
-        className={
-          scroll
-            ? "overflow-x-auto rounded-2xl border border-line"
-            : "overflow-hidden rounded-2xl border border-line"
-        }
-      >
-        <Image
-          src={src}
-          width={width}
-          height={height}
-          alt={alt}
-          priority={priority}
-          sizes="(max-width: 768px) 100vw, 1024px"
-          className={scroll ? "h-auto w-full min-w-[700px]" : "h-auto w-full"}
-        />
-      </div>
-      <figcaption className="mt-2 text-sm text-bark">{caption}</figcaption>
-    </figure>
-  );
-}
+// Read from `npm run build` at the time of writing. Next exposes First Load JS
+// only as a human-readable report, not a stable file to read at build time, so
+// the honest option is a constant with a provenance comment. Same convention as
+// docs/build-log.md.
+const BUILD = { route: "/", routeKb: "4.54 kB", firstLoadKb: "116 kB" };
+const CASE_STUDY_JS = "177 B / 111 kB";
+
+const FACTS: Fact[] = [
+  {
+    label: "First Load JS",
+    value: `${BUILD.firstLoadKb} on ${BUILD.route}`,
+    note: `route JS ${BUILD.routeKb} · this page ${CASE_STUDY_JS}`,
+  },
+  { label: "Commits", value: "13 · 8 days · 3 visual phases" },
+  {
+    label: "Size",
+    value: "9,263 lines / 85 files",
+    wide: true,
+    note: "app/ lib/ components/ scripts/ — *.ts and *.tsx only, excl. the generated UI kit",
+  },
+  {
+    label: "Stack",
+    value:
+      "Next.js 15 App Router · Tailwind v4 · shadcn/ui (Base-UI) · Supabase Postgres + btree_gist · Groq / Gemini · Resend · Vercel",
+    wide: true,
+  },
+  {
+    label: "Cost",
+    value: "Zero paid tools",
+    wide: true,
+    note: "Supabase, Groq, Gemini, Vercel, Resend, GitHub — every service on a free tier. Unsplash photos used under the Unsplash License.",
+  },
+];
 
 function Code({ children }: { children: string }) {
   return (
@@ -63,11 +56,13 @@ function Code({ children }: { children: string }) {
   );
 }
 
+const H2 = "mt-12 font-display text-3xl tracking-tight md:text-4xl";
+const H3 = "font-medium text-base text-ink";
+
 export default function CaseStudyPage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[70ch]">
-        {/* Hero */}
         <p className="text-sm font-medium tracking-wide text-bronze">
           Case Study
         </p>
@@ -76,9 +71,10 @@ export default function CaseStudyPage() {
         </h1>
         <p className="mt-4 text-lg text-bark">
           A three-chair barbershop that takes online bookings, including
-          natural-language requests. The non-trivial part isn&apos;t the form —
-          it&apos;s making sure two people can never book the same chair at
-          the same time.
+          natural-language requests and deep links from the storefront. The
+          non-trivial part isn&apos;t the form — it&apos;s making sure two
+          people can never book the same chair at the same time, in the
+          shop&apos;s timezone rather than the server&apos;s.
         </p>
         <dl className="mt-6 grid gap-4 text-sm sm:grid-cols-3">
           <div>
@@ -91,12 +87,14 @@ export default function CaseStudyPage() {
             <dt className="text-bark">Stack</dt>
             <dd className="mt-0.5 font-medium">
               Next.js 15 · Supabase Postgres + btree_gist · Groq / Gemini ·
-              Resend · Vercel
+              Resend · Vercel · Unsplash
             </dd>
           </div>
           <div>
             <dt className="text-bark">Timeline</dt>
-            <dd className="mt-0.5 font-medium">Built over 2 days</dd>
+            <dd className="mt-0.5 font-medium">
+              8 days — 6 engineering layers, then 3 visual phases
+            </dd>
           </div>
         </dl>
         <div className="mt-6 flex flex-wrap gap-3">
@@ -120,95 +118,84 @@ export default function CaseStudyPage() {
       </div>
 
       <Shot
-        src="/case-study/landing.png"
-        width={1654}
-        height={3230}
-        alt="Fade & Co. landing page with services, barbers, and hours"
-        caption="Three chairs, three barbers, five services. Book online in under a minute."
+        src="/case-study/hero.png"
+        width={2400}
+        height={1500}
+        alt="Fade & Co. landing page — cinematic barbershop photograph under a serif headline"
+        caption="Cinematic hero — one photograph, one overlay, one serif headline."
         priority
       />
 
       <div className="mx-auto max-w-[70ch]">
-        {/* 1 — Problem */}
-        <h2 className="font-display text-3xl tracking-tight">
-          1. The problem
-        </h2>
+        {/* 1 */}
+        <h2 className={H2}>1. The problem</h2>
         <div className="mt-4 space-y-4 text-bark">
           <p>
-            What a small barbershop booking flow actually needs is not just a
-            form. It needs slot computation that respects each barber&apos;s
-            hours, which services each barber offers, and one-off time-off —
-            all in the shop&apos;s timezone, not the server&apos;s.
+            Small barbershops need online booking. The hard part isn&apos;t the
+            UI — it&apos;s correctness. Two people clicking the same slot at the
+            same moment is a race condition, and a naive &ldquo;is this slot
+            free?&rdquo; check loses it silently: both requests read
+            &ldquo;free&rdquo; before either writes, and one customer turns up
+            to a double-booked chair.
           </p>
           <p>
-            The hard part isn&apos;t the UI, it&apos;s correctness. Two people
-            booking the same slot at the same instant is a race condition, and
-            a naive &ldquo;is this slot free?&rdquo; check followed by an
-            insert will silently lose it. Both requests read &ldquo;free&rdquo;
-            before either writes. One customer shows up to a double-booked
-            chair.
+            Shop-local time is the second trap. The server runs on UTC, the shop
+            runs on Asia/Kuala_Lumpur, and every conversion between the two is a
+            place to be off by a day. I made timezone a first-class concept in a
+            single module instead of scattering conversions through route
+            handlers.
           </p>
           <p>
-            And &ldquo;when is the shop open&rdquo; is a question about the
-            shop&apos;s timezone. The server runs on UTC, the shop runs on
-            Asia/Kuala_Lumpur, and every conversion between the two is a place
-            to be off by a day. I made timezone a first-class concept instead
-            of scattering conversions through route handlers.
+            The third is combinatorial. Not every barber offers every service —
+            Priya does hot-towel shaves, Sam does not — so a slot list is
+            wrong the moment you forget to filter it by the pair. Get any of
+            these wrong and the booking is still accepted; it just isn&apos;t
+            possible.
           </p>
         </div>
 
-        {/* 2 — How it works */}
-        <h2 className="mt-12 font-display text-3xl tracking-tight">
-          2. How it works
-        </h2>
+        {/* 2 */}
+        <h2 className={H2}>2. How it works</h2>
         <p className="mt-4 text-bark">
           The customer picks a service and a barber. The frontend asks for
           slots; the server computes them from hours, existing bookings, and
-          time-off with a pure function. The customer picks a time and posts
-          the booking. The database itself enforces the race safety, and a
+          time-off with a pure function. The customer picks a time and posts the
+          booking. The database itself enforces the race safety, and a
           confirmation email fires in the background.
         </p>
-        <div className="my-6 flex flex-wrap items-center gap-2 text-sm">
-          {[
-            "Pick service + barber",
-            "GET /api/slots",
-            "computeAvailableSlots",
-            "Pick a time",
-            "POST /api/bookings",
-            "Exclusion constraint",
-            "201 or 409",
-          ].map((step, i, arr) => (
-            <span key={step} className="flex items-center gap-2">
-              <span className="rounded-lg border border-line bg-parchment px-3 py-1.5 text-ink">
-                {step}
-              </span>
-              {i < arr.length - 1 ? (
-                <span aria-hidden="true" className="font-mono text-bronze">
-                  →
-                </span>
-              ) : null}
-            </span>
-          ))}
-        </div>
+        <Flow />
         <p className="text-bark">
-          One predicate runs everywhere — the algorithm, the constraint, and
-          the time-off check all use half-open intervals:
+          One predicate runs everywhere — the algorithm, the constraint, and the
+          time-off check all use half-open intervals:
         </p>
         <Code>
           {`// Same convention in the algorithm and the constraint:
 // overlap  ⟺  aStart < bEnd && aEnd > bStart
 // tstzrange(..., '[)')  ⟺  half-open, no off-by-one`}
         </Code>
+        <p className="text-bark">
+          There is a second entry point into the same wizard: type{" "}
+          <code className="font-mono text-[13px] text-ink">
+            &ldquo;fade with Sam Saturday afternoon&rdquo;
+          </code>{" "}
+          into the box above it and a model returns a structured intent —
+          service, barber, day, time, and a confidence score. Groq{" "}
+          <code className="font-mono text-[13px] text-ink">
+            openai/gpt-oss-120b
+          </code>{" "}
+          answers with{" "}
+          <code className="font-mono text-[13px] text-ink">temperature: 0</code>{" "}
+          and Gemini is the fallback when it returns nothing usable. The UI shows
+          the parse back to you before the slot list rather than jumping
+          straight to times, and falls back to the plain wizard when confidence
+          is low. That is the whole feature: it proposes, it never decides.
+        </p>
 
-        {/* 3 — Technical decisions */}
-        <h2 className="mt-12 font-display text-3xl tracking-tight">
-          3. Technical decisions
-        </h2>
+        {/* 3 */}
+        <h2 className={H2}>3. Technical decisions</h2>
         <div className="mt-4 space-y-8">
           <div>
-            <h3 className="font-medium text-base text-ink">
-              Race safety is a DB constraint, not an app check.
-            </h3>
+            <h3 className={H3}>Race safety is a DB constraint, not an app check.</h3>
             <p className="mt-1 text-bark">
               Every junior dev writes{" "}
               <code className="font-mono text-[13px] text-ink">
@@ -218,8 +205,8 @@ export default function CaseStudyPage() {
               primitive is an exclusion constraint — Postgres refuses the second
               insert at the storage layer, no matter how the requests
               interleave. The app catches error code{" "}
-              <code className="font-mono text-[13px] text-ink">23P01</code>{" "}
-              and returns a friendly 409.
+              <code className="font-mono text-[13px] text-ink">23P01</code> and
+              returns a friendly 409.
             </p>
             <Code>
               {`constraint fade_appointments_no_overlap
@@ -229,34 +216,36 @@ export default function CaseStudyPage() {
   ) where (status != 'cancelled')`}
             </Code>
           </div>
+
           <div>
-            <h3 className="font-medium text-base text-ink">
-              Half-open intervals everywhere.
-            </h3>
+            <h3 className={H3}>Half-open intervals everywhere.</h3>
             <p className="mt-1 text-bark">
               <code className="font-mono text-[13px] text-ink">
                 [start, end)
               </code>{" "}
               in the constraint, in the availability algorithm, and in the
-              time-off overlap check. The conventions have to match or you get
-              phantom one-second overlaps — a 10:00 booking ending at 10:30
-              must not block a 10:30 start. Same predicate on every path.
+              time-off overlap check. Two conventions that don&apos;t match
+              produce phantom one-second overlaps: a 10:00 booking ending at
+              10:30 must not block a 10:30 start. Same predicate on every path.
             </p>
           </div>
+
           <div>
-            <h3 className="font-medium text-base text-ink">The direct-POST bypass.</h3>
+            <h3 className={H3}>The direct-POST bypass.</h3>
             <p className="mt-1 text-bark">
-              The slots route only returns what the algorithm considers valid.
-              But nothing stopped a client from POSTing any time directly — a 3
-              AM slot, an off-grid :07 start, whatever. I only caught this in
-              code review, after the route already worked. The fix is a shared
-              server-side validator that re-checks the requested time against
-              the barber&apos;s hours and the service mapping before insert.
+              <code className="font-mono text-[13px] text-ink">/api/slots</code>{" "}
+              only returns what the algorithm considers valid. But nothing
+              stopped a client from POSTing any time directly — a 3 AM slot, an
+              off-grid <code className="font-mono text-[13px] text-ink">:07</code>{" "}
+              start. I only caught this in code review, after the route already
+              worked. The fix was a shared server-side validator that re-checks
+              the requested time against the barber&apos;s hours before insert.
               Client filters are UX; server validation is correctness.
             </p>
           </div>
+
           <div>
-            <h3 className="font-medium text-base text-ink">
+            <h3 className={H3}>
               <code className="font-mono text-[13px] text-ink">waitUntil</code>{" "}
               for the confirmation email.
             </h3>
@@ -268,121 +257,180 @@ export default function CaseStudyPage() {
               from <code className="font-mono text-[13px] text-ink">@vercel/functions</code>{" "}
               extends the function lifetime until the send settles. The sender
               returns a boolean and never throws, so email can never break a
-              booking.
+              booking. The <code className="font-mono text-[13px] text-ink">waitUntil</code> path is
+              exercised against the local server; confirming delivery to a
+              production inbox is still open.
             </p>
           </div>
+
           <div>
-            <h3 className="font-medium text-base text-ink">
-              Natural-language booking shows its work.
-            </h3>
+            <h3 className={H3}>Deep-linkable booking.</h3>
             <p className="mt-1 text-bark">
-              Type &ldquo;fade with Sam Saturday afternoon&rdquo; and the AI
-              returns a structured intent — service, barber, day, time, and a
-              confidence score. The UI shows that interpretation before the
-              slot list rather than jumping straight to times. If confidence is
-              low or nothing matches, the card falls back gracefully instead
-              of guessing.
+              <code className="font-mono text-[13px] text-ink">
+                /book?barber=sam&amp;service=fade
+              </code>{" "}
+              preselects both and advances to the slot picker. Every service row
+              and barber card on the landing page links through, so the booking
+              flow is one URL param away from any marketing surface. The first
+              version built the link and then ignored the param entirely — the
+              barber card said &ldquo;Book with Sam&rdquo; and landed on a blank
+              service list. Fixed in phase 3, along with the case where a
+              deep-linked barber doesn&apos;t offer the chosen service.
             </p>
-            <Code>
-              {`POST /api/parse-booking { text: "fade with Sam Saturday afternoon" }
-→ { service: "Fade", barber: "Sam", dayHint: "Saturday",
-    timeHint: "afternoon", confidence: 0.99 }`}
-            </Code>
           </div>
+
           <div>
-            <h3 className="font-medium text-base text-ink">
-              Timezone is a first-class concept, not an afterthought.
+            <h3 className={H3}>
+              Physical materials without photography we don&apos;t have.
             </h3>
             <p className="mt-1 text-bark">
-              All timestamps are stored UTC. Shop-local time comes from a{" "}
-              <code className="font-mono text-[13px] text-ink">SHOP_TIMEZONE</code>{" "}
-              variable through a single conversion module. Slot math runs in
-              shop-local wall clock, then converts to UTC at the boundary.
-              I verified the helpers return byte-identical results under
-              three different server timezones. Correct by construction, not
-              by accident.
+              Fade &amp; Co. is a fictional shop. No real haircuts, no real
+              barbers, no real interior. The solution was a small curated set of
+              Unsplash photographs for the hero and the portraits, and
+              hand-drawn SVG accents where stock imagery would be too obviously
+              borrowed. Eight photographs ship as WebP with a JPEG fallback,
+              every one credited in{" "}
+              <code className="font-mono text-[13px] text-ink">public/CREDITS.md</code>
+              . The whole thing is documented as a portfolio piece rather than
+              dressed up as a real business.
             </p>
           </div>
         </div>
-
-        {/* 4 — Concurrency test */}
-        <h2 className="mt-12 font-display text-3xl tracking-tight">
-          4. The concurrency test
-        </h2>
       </div>
 
       <Shot
-        src="/case-study/concurrency-test.png"
-        width={1127}
-        height={221}
-        alt="Terminal showing the concurrency test passing against production"
-        caption="Two POSTs, one slot, one winner."
-        scroll
+        src="/case-study/menu.png"
+        width={2880}
+        height={1800}
+        alt="Services listed as a printed menu with dotted leaders and right-aligned prices"
+        caption="Services as a printed menu — leaders, prices, no boxes."
+      />
+
+      <div className="grid items-start gap-6 md:grid-cols-2">
+        <Shot
+          src="/case-study/barbers.png"
+          width={2880}
+          height={1800}
+          layout="half"
+          alt="Three barber portraits with names, roles, and service pills"
+          caption="Three barbers, photographed. Roles and specialities underneath."
+        />
+        <Shot
+          src="/case-study/dark-about.png"
+          width={2880}
+          height={1800}
+          layout="half"
+          alt="About section on matte black with an offset interior photograph"
+          caption="Matte black, gold accent. The dark chapter."
+        />
+      </div>
+
+      <Shot
+        src="/case-study/reviews.png"
+        width={2880}
+        height={1800}
+        alt="Three five-star review cards on matte black, with gold stars and gold rules"
+        caption="Five-star cards on matte black, gold rules. Same palette as the admin."
       />
 
       <div className="mx-auto max-w-[70ch]">
-        <p className="text-bark">
-          The test fires two{" "}
-          <code className="font-mono text-[13px] text-ink">
-            POST /api/bookings
-          </code>{" "}
-          calls in the same tick via{" "}
-          <code className="font-mono text-[13px] text-ink">Promise.all</code>,
-          then asserts exactly one 201 and one 409 and that the database
-          contains exactly one row for the slot. The screenshot above is a run
-          against the deployed URL — same result as local. The database
-          doesn&apos;t care where the request came from; the constraint is
-          the constraint.
-        </p>
+        {/* 4 */}
+        <h2 className={H2}>4. The visual system</h2>
+        <div className="mt-4 space-y-4 text-bark">
+          <p>
+            Fade &amp; Co. needed to feel like a neighborhood barbershop, not a
+            SaaS dashboard. SupportAI and LeadFlow both live in the same
+            dark-zinc-and-indigo world; giving Fade &amp; Co. the same palette would
+            have made three projects feel like one design with three names. So:
+            cream storefront (Instrument Serif, warm ivory base, brass accent),
+            matte black and gold for the dark interior sections (About,
+            Reviews), and the admin on the same dark palette — so the shop and
+            its back office feel like one building.
+          </p>
+          <p>
+            The typography pairing is Instrument Serif for display — headlines,
+            section titles — and Inter for body, with Geist Mono for every
+            number, price, time, and reference code. The serif carries the
+            heritage; the mono carries the precision.
+          </p>
+          <p>
+            Structurally, three phases added an announcement bar with a session
+            dismiss, a trust strip, real photography for the hero and the
+            portraits, the printed-menu services layout, the dark About and
+            Reviews chapters, a booking flow with slide transitions and a
+            success screen, and a mobile sticky CTA. The whole build was three
+            phases over eight days; the details are what make it feel like a real
+            shop.
+          </p>
+        </div>
+
+        {/* 5 */}
+        <h2 className={H2}>5. The booking flow</h2>
+        <div className="mt-4 space-y-4 text-bark">
+          <p>
+            A booking flow has three states users actually care about: choosing
+            a slot, seeing it confirmed, and not having to think about it again.
+            Everything else is intermediate. The wizard has four steps — service,
+            barber, slot, confirm — the steps slide horizontally between each
+            other, and the progress indicator shows completed, current, and
+            upcoming states in brass.
+          </p>
+          <p>
+            The success screen is a small thing that matters. A reference code
+            in mono with a copy button, the full booking summary, and an{" "}
+            <code className="font-mono text-[13px] text-ink">.ics</code>{" "}
+            download so the appointment lands in the user&apos;s calendar
+            without retyping the details. Building the calendar file surfaced a
+            real bug: the timestamps were emitted without the{" "}
+            <code className="font-mono text-[13px] text-ink">Z</code> designator,
+            which makes an RFC 5545 date-time a floating local time. A 12:00
+            booking in Kuala Lumpur opened at 04:00. This is what separates a
+            demo from a product — the small courtesies.
+          </p>
+          <p>
+            The concurrency test fires two{" "}
+            <code className="font-mono text-[13px] text-ink">
+              POST /api/bookings
+            </code>{" "}
+            calls in the same tick via{" "}
+            <code className="font-mono text-[13px] text-ink">Promise.all</code>,
+            then asserts exactly one 201 and one 409 and that the database
+            contains exactly one row for the slot. It passes against the local
+            server and against the deployed URL. The database doesn&apos;t care
+            where the request came from — the constraint is the constraint.
+          </p>
+        </div>
         <Code>
           {`response A: 409 {"error":"slot_taken","message":"That slot was just taken. Please pick another time."}
 response B: 201 {"ok":true,"reference_code":"FC-20261006-0005",...}
 ✅ Exactly one booking succeeded (ref: FC-20261006-0005)
 ✅ Second request rejected with 409 slot_taken
-✅ DB has exactly 1 row for slot 2026-10-06T01:00:00.000Z
+✅ DB has exactly 1 non-cancelled row for slot 2026-10-06T01:00:00.000Z
+✅ Winning appointment cleaned up
 PASS`}
         </Code>
-
-        {/* 5 — Design */}
-        <h2 className="mt-12 font-display text-3xl tracking-tight">
-          5. Design
-        </h2>
-        <div className="mt-4 space-y-4 text-bark">
-          <p>
-            Three projects into the portfolio, the visual language needed to
-            diverge. The first two both read as SaaS — dark zinc, indigo,
-            Inter. That&apos;s correct for a support tool and a B2B lead
-            pipeline. Wrong for a neighborhood barbershop. Fade &amp; Co.
-            needed its own identity.
-          </p>
-          <p>
-            The storefront is warm cream, Instrument Serif for display,
-            brass and amber accents, dark brown text. The admin wing stays
-            dark but warm — dark walnut with cream text, same serif.
-            Consistent building, two different rooms.
-          </p>
-          <p>
-            Contrast was measured, not eyeballed. Body text 15.49, secondary
-            5.45, buttons 6.79 — all AA. Cream palettes fail WCAG easily; a
-            beautiful page nobody can read is a worse portfolio piece than a
-            plain one.
-          </p>
-        </div>
       </div>
 
       <Shot
-        src="/case-study/booking.png"
-        width={1669}
-        height={911}
-        alt="The booking wizard with service selection"
-        caption="The wizard — warm, uncluttered, no cold SaaS chrome."
+        src="/case-study/booking-flow.png"
+        width={1728}
+        height={608}
+        layout="narrow"
+        alt="Booking wizard on the barber step, progress indicator showing completed, current, and upcoming"
+        caption="Four steps, slide transitions, brass progress."
+      />
+
+      <Shot
+        src="/case-study/booking-success.png"
+        width={2880}
+        height={1800}
+        alt="Booking confirmation with a checkmark, reference code, and booking summary"
+        caption="Reference code, full summary, .ics download."
       />
 
       <div className="mx-auto max-w-[70ch]">
-        {/* 6 — Differently */}
-        <h2 className="font-display text-3xl tracking-tight">
-          6. What I&apos;d do differently
-        </h2>
+        {/* 6 */}
+        <h2 className={H2}>6. What I&apos;d do differently</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 text-bark">
           <li>
             <strong className="font-medium text-ink">
@@ -396,90 +444,34 @@ PASS`}
             <strong className="font-medium text-ink">
               Time-off management is a shared calendar, not a form.
             </strong>{" "}
-            A shop with three barbers coordinates time off constantly. v1
-            treats it as per-barber blocks. A month grid where the owner drags
-            across barbers is the right UX.
+            A shop with three barbers coordinates time off constantly. v1 treats
+            it as per-barber blocks. A month grid where the owner drags across
+            barbers is the right UX.
           </li>
           <li>
             <strong className="font-medium text-ink">
               Rate limiting is a Map, not Redis.
             </strong>{" "}
-            Same trade-off as the earlier project — fine for a demo, wrong for
-            production.
+            Same trade-off as the earlier projects — fine for a demo, wrong for
+            production. Upstash Redis with a sliding window.
           </li>
         </ul>
 
-        {/* 7 — Under the hood */}
-        <h2 className="mt-12 font-display text-3xl tracking-tight">
-          7. Under the hood
-        </h2>
-        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-parchment p-4">
-            <dt className="text-bark">Size</dt>
-            <dd className="mt-0.5 font-mono text-ink">
-              ~6,600 app lines · 76 files · 9 commits
-            </dd>
-            <dd className="mt-1 font-mono text-[11px] text-bark">
-              app/ lib/ components/ scripts/, excl. generated UI kit
-            </dd>
-          </div>
-          <div className="rounded-xl border border-line bg-parchment p-4">
-            <dt className="text-bark">Checks</dt>
-            <dd className="mt-0.5 font-mono text-ink">
-              tsc · build · seed · concurrency — all green
-            </dd>
-          </div>
-          <div className="rounded-xl border border-line bg-parchment p-4">
-            <dt className="text-bark">Time</dt>
-            <dd className="mt-0.5 font-mono text-ink">
-              All timestamps UTC; shop-local via SHOP_TIMEZONE
-            </dd>
-          </div>
-          <div className="rounded-xl border border-line bg-parchment p-4">
-            <dt className="text-bark">Database</dt>
-            <dd className="mt-0.5 font-mono text-ink">
-              btree_gist required for the exclusion constraint
-            </dd>
-          </div>
-          <div className="rounded-xl border border-line bg-parchment p-4 sm:col-span-2">
-            <dt className="text-bark">Cost</dt>
-            <dd className="mt-0.5 font-mono text-ink">
-              Zero paid tools — Supabase, Groq, Gemini, Vercel, Resend,
-              GitHub all on free tiers
-            </dd>
-          </div>
-        </dl>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <Shot
-          src="/case-study/admin-schedule.png"
-          width={1669}
-          height={911}
-          alt="Today's schedule showing three barber columns"
-          caption="Today's schedule — three barbers, one glance."
-          compact
-        />
-        <Shot
-          src="/case-study/service.png"
-          width={1669}
-          height={911}
-          alt="Services table in the admin dashboard"
-          caption="Delete protection — a service with future appointments can't be removed."
-          compact
-        />
+        {/* 7 */}
+        <h2 className={H2}>7. Under the hood</h2>
+        <Facts items={FACTS} />
       </div>
 
       <Shot
-        src="/case-study/nl-parse.png"
-        width={1038}
-        height={531}
-        alt="Parsed natural-language booking intent card"
-        caption="Natural-language input. The parse is shown, not hidden."
+        src="/case-study/admin-schedule.png"
+        width={2880}
+        height={1800}
+        alt="Admin today view with three barber columns, confirmed badges, and free-window blocks"
+        caption="The admin on the same matte black + brass as the dark storefront sections."
       />
 
       <div className="mx-auto max-w-[70ch]">
-        {/* 8 — Footer */}
+        {/* 8 */}
         <footer className="mt-8 border-t border-line pt-6 text-sm text-bark">
           <p>
             Built by{" "}
@@ -493,8 +485,8 @@ PASS`}
             </a>
           </p>
           <p className="mt-1">
-            Fade &amp; Co. is a fictional barbershop. This is a portfolio
-            piece — no real customers, no real bookings.
+            Fade &amp; Co. is a fictional barbershop. This is a portfolio piece —
+            no real customers, no real bookings.
           </p>
           <p className="mt-4">
             <Link href="/" className="text-bronze hover:text-ink">

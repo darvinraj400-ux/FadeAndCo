@@ -2,6 +2,50 @@
 
 Reverse-chronological. One section per completed layer.
 
+## 2026-10-11 — Barbershop layer 3: booking polish, admin refresh, security headers
+
+- `/book?barber=slug` and `?service=slug` now preselect and advance. The
+  parameter was built in an earlier layer and then ignored entirely — the
+  "Book with Sam" card linked to it and the wizard started at step 1 anyway.
+  Also handles the case where a deep-linked barber doesn't offer the chosen
+  service: the selection is cleared and the reason is shown inline.
+- Booking steps slide between each other, 320ms, 40px, via a CSS grid layer
+  stack. No animation library was added — Motion is not a dependency and
+  "no new dependencies" was a hard constraint, so `AnimatePresence` was
+  substituted with `@starting-style`. Reduced motion swaps instantly.
+- Success screen rebuilt: animated checkmark, copy-to-clipboard reference,
+  full summary, `.ics` download, Done. `lib/ics.ts` is a dependency-free
+  RFC 5545 builder.
+- Mobile sticky "Book now" on the landing page only.
+- Admin re-themed onto the same dark + gold system as the storefront's dark
+  sections, by repointing the six admin-only Tailwind tokens rather than
+  editing ~100 class sites.
+- Five security headers added to `next.config.ts`. CSP deferred with a note
+  on why a naive one breaks the OSM iframe and the App Router's inline RSC
+  bootstrap.
+
+**Bugs found in review and fixed**, both worth recording:
+
+- `Reveal`/`AboutPhoto` hid content on mount and relied on
+  `IntersectionObserver` to re-show it. An element outside the viewport when
+  the observer is created never fires, so a deep link (`/#faq`) left whole
+  sections — and the footer — stuck at `opacity: 0`.
+- The hero photograph and Sam's portrait were the same Unsplash source,
+  visible in a screenshot before it shipped.
+
+**Verification.** tsc, eslint, build clean. 85-check Playwright suite against
+the production build, 8 reduced-motion checks, 43 Phase-2 regression checks,
+14 `.ics` unit checks, zero console errors. First Load JS 115 kB → 116 kB;
+`/book` route JS 9.08 kB / 139 kB.
+
+**Deferred:** the project previously set no security headers at all beyond the
+admin cookie gate — a Content-Security-Policy is still outstanding, deferred
+because the OSM iframe and the App Router's inline RSC bootstrap make a naive
+policy break the site. Hours on the marketing page are static copy rather than
+derived from `fade_barber_hours`, so an admin hours edit will not propagate
+there. `<picture>` ships single-size files, so below-fold images are larger
+than they need to be on mobile.
+
 ## 2026-10-11 — Barbershop layers 1 + 2: structure, then visual craft
 
 **Layer 1** (`b445e3c`, `dd3985a`): marketing page re-sectioned around real
