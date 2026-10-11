@@ -84,7 +84,7 @@ export default async function AdminBarbersPage() {
           Barbers
         </h1>
         <p className="mt-1 text-sm text-cream/60">
-          {rows.length} barbers · services and weekly hours per barber
+          <span className="font-mono">{rows.length}</span> barbers · services and weekly hours per barber
         </p>
       </div>
       <BarberTable

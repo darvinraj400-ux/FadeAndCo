@@ -110,21 +110,21 @@ export function TimeOffEditor({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-cream">
+      <h3 className="font-display text-base text-cream">
         Time off — {barberName}
       </h3>
       {loading ? (
-        <p className="text-sm text-cream/40">Loading…</p>
+        <p className="text-sm text-cream/60">Loading…</p>
       ) : blocks.length === 0 ? (
-        <p className="text-sm text-cream/40">No time-off blocks.</p>
+        <p className="text-sm text-cream/60">No time-off blocks.</p>
       ) : (
         <ul className="space-y-2">
           {blocks.map((b) => (
             <li
               key={b.id}
-              className="flex items-center justify-between gap-2 rounded-lg border border-dashed border-cream/15 px-3 py-2 text-sm"
+              className="flex items-center justify-between gap-2 rounded-lg border border-dashed border-gold/15 px-3 py-2 text-sm"
             >
-              <span className="text-cream/70">
+              <span className="font-mono text-cream/70">
                 {b.startLabel} – {b.endLabel}
                 {b.reason ? ` · ${b.reason}` : ""}
               </span>
@@ -133,7 +133,7 @@ export function TimeOffEditor({
                 variant="outline"
                 size="sm"
                 onClick={() => handleDelete(b.id)}
-                className="border-cream/15 bg-transparent text-[#e0977f] hover:bg-cream/10"
+                className="border-gold/15 bg-transparent text-ember hover:bg-cream/10"
               >
                 Remove
               </Button>
@@ -149,7 +149,7 @@ export function TimeOffEditor({
               type="datetime-local"
               value={start}
               onChange={(e) => setStart(e.target.value)}
-              className="border-cream/15 bg-coal"
+              className="border-gold/15 bg-coal font-mono text-sm"
             />
           </label>
           <label className="grid gap-1 text-xs text-cream/60">
@@ -158,7 +158,7 @@ export function TimeOffEditor({
               type="datetime-local"
               value={end}
               onChange={(e) => setEnd(e.target.value)}
-              className="border-cream/15 bg-coal"
+              className="border-gold/15 bg-coal font-mono text-sm"
             />
           </label>
         </div>
@@ -169,7 +169,7 @@ export function TimeOffEditor({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Vacation, sick day…"
-            className="border-cream/15 bg-coal"
+            className="border-gold/15 bg-coal"
           />
         </div>
         <Button
@@ -178,7 +178,7 @@ export function TimeOffEditor({
           disabled={pending}
           variant="outline"
           size="sm"
-          className="w-fit border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
+          className="w-fit border-gold/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
         >
           {pending ? "Adding…" : "Add block"}
         </Button>

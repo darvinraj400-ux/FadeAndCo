@@ -7,6 +7,7 @@ import { Reveal } from "@/components/marketing/Reveal";
 import { FaqSection } from "@/components/marketing/FaqSection";
 import { Hero } from "@/components/marketing/Hero";
 import { AboutPhoto } from "@/components/marketing/AboutPhoto";
+import { MobileBookCta } from "@/components/marketing/MobileBookCta";
 import { Photo } from "@/components/marketing/Photo";
 
 export const dynamic = "force-dynamic";
@@ -154,6 +155,12 @@ function ServiceRow({ service }: { service: Service }) {
       {service.description ? (
         <p className="mt-0.5 text-sm text-bark">{service.description}</p>
       ) : null}
+      <Link
+        href={`/book?service=${encodeURIComponent(service.slug)}`}
+        className="mt-1 inline-block text-sm font-medium text-bronze transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-bronze"
+      >
+        Book this →
+      </Link>
     </div>
   );
 }
@@ -569,7 +576,7 @@ export default async function MarketingHomePage() {
       {/* Footer — deliberately not wrapped in Reveal: it is the last element
           on the page, so it gains nothing from an entrance, and a transform on
           an ancestor would create a containing block for the whole footer. */}
-      <footer className="border-t border-line">
+      <footer id="site-footer" className="border-t border-line">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <p className="font-display text-xl">Fade &amp; Co.</p>
@@ -664,6 +671,9 @@ export default async function MarketingHomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Outside every <Reveal> and outside the footer — see MobileBookCta. */}
+      <MobileBookCta />
     </div>
   );
 }

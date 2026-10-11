@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { BookingFlow, type NlPrefill } from "@/components/booking/BookingFlow";
 import {
   NlBookingInput,
@@ -69,7 +70,23 @@ export function BookPageClient() {
         or pick step by step
         <span className="h-px flex-1 bg-line" />
       </div>
-      <BookingFlow nlPrefill={nlPrefill} />
+      {/* BookingFlow reads ?barber= / ?service= via useSearchParams, which
+          opts the client tree into dynamic rendering and therefore needs a
+          Suspense boundary. The fallback matches app/book/loading.tsx. */}
+      <Suspense
+        fallback={
+          <div className="space-y-6" data-testid="booking-skeleton">
+            <div className="flex gap-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-7 w-7 rounded-full" />
+              ))}
+            </div>
+            <Skeleton className="h-64 w-full" />
+          </div>
+        }
+      >
+        <BookingFlow nlPrefill={nlPrefill} />
+      </Suspense>
     </div>
   );
 }

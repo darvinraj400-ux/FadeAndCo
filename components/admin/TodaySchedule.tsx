@@ -54,8 +54,8 @@ export function TodaySchedule({
             Today — {dateLabel}
           </h1>
           <p className="mt-1 text-sm text-cream/60">
-            {count} appointment{count === 1 ? "" : "s"} · shop local (
-            {tzAbbrev})
+            <span className="font-mono">{count}</span> appointment
+            {count === 1 ? "" : "s"} · shop local (<span className="font-mono">{tzAbbrev}</span>)
           </p>
           {count === 0 ? (
             <p
@@ -69,19 +69,19 @@ export function TodaySchedule({
         <div className="flex items-center gap-2 text-sm">
           <Link
             href={prevHref}
-            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
+            className="rounded-lg border border-gold/15 px-3 py-1.5 text-cream/70 hover:border-gold hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             ← Prev
           </Link>
           <Link
             href={todayHref}
-            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
+            className="rounded-lg border border-gold/15 px-3 py-1.5 text-cream/70 hover:border-gold hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             Today
           </Link>
           <Link
             href={nextHref}
-            className="rounded-lg border border-cream/15 px-3 py-1.5 text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
+            className="rounded-lg border border-gold/15 px-3 py-1.5 text-cream/70 hover:border-gold hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             Next →
           </Link>
@@ -92,34 +92,44 @@ export function TodaySchedule({
         {days.map((d) => (
           <Card
             key={d.barber.id}
-            className="border-cream/10 bg-panel p-4"
+            className="border-cream/10 bg-panel p-4 text-cream"
           >
             <div className="flex items-baseline justify-between gap-2">
               <h2 className="font-display text-xl text-cream">
                 {d.barber.name}
               </h2>
               <span className="text-xs text-cream/60">
-                {d.working
-                  ? `Today: ${d.blocks.length} appointment${d.blocks.length === 1 ? "" : "s"}`
-                  : "Not working today"}
+                {d.working ? (
+                  <>
+                    Today: <span className="font-mono">{d.blocks.length}</span>{" "}
+                    appointment{d.blocks.length === 1 ? "" : "s"}
+                  </>
+                ) : (
+                  "Not working today"
+                )}
               </span>
             </div>
             {d.hoursLabel ? (
-              <p className="mt-0.5 text-xs text-cream/40">{d.hoursLabel}</p>
+              <p className="mt-0.5 font-mono text-xs text-cream/60">
+                {d.hoursLabel}
+              </p>
             ) : null}
 
             <div className="mt-3 space-y-2">
               {!d.working ? (
-                <p className="text-sm text-cream/40">Not working today.</p>
+                <p className="text-sm text-cream/60">Not working today.</p>
               ) : (
                 <>
                   {d.timeOff.map((t) => (
                     <div
                       key={t.id}
-                      className="rounded-lg border border-dashed border-cream/15 bg-cream/5 px-3 py-2"
+                      className="rounded-lg border border-dashed border-gold/15 bg-cream/5 px-3 py-2"
                     >
                       <p className="text-xs text-cream/60">
-                        Off · {t.startLabel} – {t.endLabel}
+                        Off ·{" "}
+                        <span className="font-mono">
+                          {t.startLabel} – {t.endLabel}
+                        </span>
                         {t.reason ? ` · ${t.reason}` : ""}
                       </p>
                     </div>
@@ -127,10 +137,10 @@ export function TodaySchedule({
                   {d.blocks.map((b) => (
                     <div
                       key={b.id}
-                      className="rounded-lg border border-cream/15 bg-cream/5 px-3 py-2"
+                      className="rounded-lg border border-gold/15 bg-cream/5 px-3 py-2"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-cream/60">
+                        <span className="font-mono text-xs text-cream/60">
                           {b.startLabel} – {b.endLabel}
                         </span>
                         <StatusBadge status={b.status} />
@@ -139,21 +149,24 @@ export function TodaySchedule({
                         {b.customerName}
                       </p>
                       <p className="text-xs text-cream/60">
-                        {b.serviceName} · {b.durationMinutes} min
+                        {b.serviceName} ·{" "}
+                        <span className="font-mono">{b.durationMinutes} min</span>
                       </p>
                     </div>
                   ))}
                   {d.blocks.length === 0 && d.timeOff.length === 0 ? (
-                    <p className="text-sm text-cream/40">
+                    <p className="text-sm text-cream/60">
                       No appointments — wide open.
                     </p>
                   ) : null}
                   {d.freeLabels.length > 0 ? (
                     <div className="rounded-lg border border-cream/10 px-3 py-2">
-                      <p className="text-xs text-cream/40">
+                      <p className="text-xs text-cream/60">
                         Free windows (30-min probe):{" "}
-                        {d.freeLabels.join(", ")}
-                        {d.freeMore > 0 ? ` +${d.freeMore} more` : ""}
+                        <span className="font-mono text-cream/70">
+                          {d.freeLabels.join(", ")}
+                          {d.freeMore > 0 ? ` +${d.freeMore} more` : ""}
+                        </span>
                       </p>
                     </div>
                   ) : null}
@@ -164,7 +177,7 @@ export function TodaySchedule({
             <div className="mt-3 border-t border-cream/10 pt-2">
               <Link
                 href="/admin/appointments"
-                className="text-xs text-brass hover:text-cream"
+                className="text-xs text-gold hover:text-cream"
               >
                 Add booking →
               </Link>

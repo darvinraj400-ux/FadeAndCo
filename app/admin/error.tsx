@@ -22,14 +22,14 @@ export default function AdminError({
         The admin view failed to load. Your data is safe — try again.
       </p>
       {error.digest ? (
-        <p className="mt-2 font-mono text-xs text-cream/40">
+        <p className="mt-2 font-mono text-xs text-stone">
           Reference: {error.digest}
         </p>
       ) : null}
       <button
         type="button"
         onClick={() => reset()}
-        className="mt-4 rounded-lg border border-cream/15 px-4 py-2 text-sm text-cream hover:border-brass"
+        className="mt-4 rounded-lg border border-gold/15 px-4 py-2 text-sm text-cream hover:border-gold"
       >
         Try again
       </button>

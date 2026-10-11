@@ -39,7 +39,7 @@ export default async function AdminServicesPage() {
           Services
         </h1>
         <p className="mt-1 text-sm text-cream/60">
-          {services.length} services · inactive ones stay hidden from booking
+          <span className="font-mono">{services.length}</span> services · inactive ones stay hidden from booking
         </p>
       </div>
       <ServiceTable services={services} />

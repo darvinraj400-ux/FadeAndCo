@@ -137,14 +137,14 @@ export default async function AdminAppointmentsPage({
             Appointments
           </h1>
           <p className="mt-1 text-sm text-cream/60">
-            {rows.length} shown · newest first · showing up to 100 — narrow
+            <span className="font-mono">{rows.length}</span> shown · newest first · showing up to 100 — narrow
             filters for more
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <Link
             href={filterHref(query, { status: null })}
-            className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass ${!status ? "border-brass/50 bg-brass/15 text-brass" : "border-cream/15 text-cream/70 hover:border-brass"}`}
+            className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${!status ? "border-gold/50 bg-gold/15 text-gold" : "border-gold/15 text-cream/70 hover:border-gold"}`}
           >
             All
           </Link>
@@ -152,7 +152,7 @@ export default async function AdminAppointmentsPage({
             <Link
               key={s}
               href={filterHref(query, { status: s })}
-              className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass capitalize ${status === s ? "border-brass/50 bg-brass/15 text-brass" : "border-cream/15 text-cream/70 hover:border-brass"}`}
+              className={`rounded-lg border px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold capitalize ${status === s ? "border-gold/50 bg-gold/15 text-gold" : "border-gold/15 text-cream/70 hover:border-gold"}`}
             >
               {s === "no_show" ? "No-show" : s}
             </Link>
@@ -171,7 +171,7 @@ export default async function AdminAppointmentsPage({
           <select
             name="barberId"
             defaultValue={barberId ?? ""}
-            className="rounded-lg border border-cream/15 bg-panel px-3 py-1.5 text-sm text-cream"
+            className="rounded-lg border border-gold/15 bg-panel px-3 py-1.5 text-sm text-cream"
           >
             <option value="">All barbers</option>
             {((barbers ?? []) as Array<{ id: string; name: string }>).map(
@@ -189,18 +189,18 @@ export default async function AdminAppointmentsPage({
             type="date"
             name="date"
             defaultValue={dateValue}
-            className="rounded-lg border border-cream/15 bg-panel px-3 py-1.5 text-sm text-cream"
+            className="rounded-lg border border-gold/15 bg-panel px-3 py-1.5 text-sm text-cream"
           />
         </label>
         <button
           type="submit"
-          className="rounded-lg border border-cream/15 px-3 py-1.5 text-sm text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
+          className="rounded-lg border border-gold/15 px-3 py-1.5 text-sm text-cream/70 hover:border-gold hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           Filter
         </button>
         <Link
           href="/admin/appointments"
-          className="rounded-lg border border-cream/15 px-3 py-1.5 text-sm text-cream/70 hover:border-brass hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
+          className="rounded-lg border border-gold/15 px-3 py-1.5 text-sm text-cream/70 hover:border-gold hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           Clear
         </Link>

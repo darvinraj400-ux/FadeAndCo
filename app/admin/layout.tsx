@@ -14,12 +14,12 @@ export default function AdminLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="admin-dark min-h-screen bg-coal text-cream">
-      <header className="border-b border-cream/10">
+      <header className="sticky top-0 z-30 border-b border-cream/10 bg-coal/90 backdrop-blur">
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4">
           <div className="flex items-center gap-6">
             <Link
               href="/admin"
-              className="font-display text-lg tracking-tight text-cream"
+              className="border-l-2 border-gold pl-3 font-display text-lg tracking-tight text-cream transition-colors hover:text-gold"
             >
               Fade &amp; Co. Admin
             </Link>

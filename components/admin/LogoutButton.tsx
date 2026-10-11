@@ -34,7 +34,7 @@ export function LogoutButton() {
       size="sm"
       onClick={logout}
       disabled={busy}
-      className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
+      className="border-gold/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
     >
       Logout
     </Button>

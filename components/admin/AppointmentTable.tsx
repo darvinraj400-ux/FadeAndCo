@@ -115,7 +115,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
                 <TableCell className="font-mono text-xs text-cream/70">
                   {b.referenceCode}
                 </TableCell>
-                <TableCell className="text-sm text-cream/70">
+                <TableCell className="font-mono text-sm text-cream/70">
                   {b.dateLabel} · {b.startLabel} – {b.endLabel}
                 </TableCell>
                 <TableCell>
@@ -149,7 +149,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
             <DialogTitle className="font-mono text-sm">
               {selected?.referenceCode}
             </DialogTitle>
-            <DialogDescription className="text-cream/60">
+            <DialogDescription className="font-mono text-cream/60">
               {selected?.dateLabel} · {selected?.startLabel} –{" "}
               {selected?.endLabel}
             </DialogDescription>
@@ -164,7 +164,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
                 <span className="text-cream/60">Email: </span>
                 <a
                   href={`mailto:${selected.customerEmail}`}
-                  className="text-brass hover:text-cream"
+                  className="text-gold hover:text-cream"
                 >
                   {selected.customerEmail}
                 </a>
@@ -200,7 +200,7 @@ export function AppointmentTable({ bookings }: { bookings: BookingRow[] }) {
                   size="sm"
                   disabled={pending}
                   onClick={() => setStatus(selected.id, a.status)}
-                  className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
+                  className="border-gold/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
                 >
                   {a.label}
                 </Button>

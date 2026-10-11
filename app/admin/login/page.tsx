@@ -42,8 +42,11 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Card className="w-full max-w-sm border-cream/10 bg-panel">
+    <div className="flex min-h-[70vh] items-center justify-center px-4">
+      {/* Card is the "surface" token (#1a1a1a) on the matte-black shell
+          (#111111) — a card painted the same colour as the page reads as
+          nothing at all. The brass hairline alone is too faint to carry it. */}
+      <Card className="w-full max-w-sm border-gold/25 bg-panel text-cream">
         <CardHeader>
           <CardTitle className="font-display text-2xl text-cream">
             Fade &amp; Co. Admin
@@ -63,13 +66,13 @@ export default function AdminLoginPage() {
                 disabled={busy}
                 autoComplete="current-password"
                 autoFocus
-                className="border-cream/15 bg-coal text-cream"
+                className="border-gold/15 bg-coal text-cream"
               />
             </div>
             <Button
               type="submit"
               disabled={busy || !password}
-              className="bg-brass text-ink hover:bg-brass/85"
+              className="bg-gold text-ink hover:bg-gold/85"
             >
               {busy ? "Checking…" : "Log in"}
             </Button>

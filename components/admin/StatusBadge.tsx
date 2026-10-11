@@ -10,9 +10,9 @@ export type AppointmentStatus =
 // Warm-tinted status colors for the coal admin. Unknown values fall back
 // to the muted style with the raw status as label (never a blank badge).
 const STATUS_STYLES: Record<AppointmentStatus, string> = {
-  confirmed: "border-brass/40 bg-brass/15 text-brass",
+  confirmed: "border-gold/40 bg-gold/15 text-gold",
   completed: "border-moss/40 bg-moss/15 text-moss",
-  cancelled: "border-cream/15 bg-cream/5 text-cream/60",
+  cancelled: "border-gold/15 bg-cream/5 text-cream/60",
   no_show: "border-ember/40 bg-brick/20 text-ember",
 };
 

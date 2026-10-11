@@ -220,7 +220,7 @@ export function BarberTable({
         <Button
           type="button"
           onClick={openNew}
-          className="bg-brass text-ink hover:bg-brass/85"
+          className="bg-gold text-ink hover:bg-gold/85"
         >
           Add barber
         </Button>
@@ -251,21 +251,32 @@ export function BarberTable({
               <TableRow key={b.id} className="border-cream/10">
                 <TableCell>
                   <p className="font-medium text-cream">{b.name}</p>
-                  <p className="font-mono text-xs text-cream/40">{b.slug}</p>
+                  <p className="font-mono text-xs text-cream/60">{b.slug}</p>
                 </TableCell>
                 <TableCell className="text-sm text-cream/70">
-                  {b.serviceNames.length > 0
-                    ? `${b.serviceNames.length} · ${b.serviceNames.join(", ")}`
-                    : "—"}
+                  {b.serviceNames.length > 0 ? (
+                    <>
+                      <span className="font-mono">{b.serviceNames.length}</span> A·{" "}
+                      {b.serviceNames.join(", ")}
+                    </>
+                  ) : (
+                    "—"
+                  )}
                 </TableCell>
                 <TableCell className="text-sm text-cream/70">
-                  {b.hours.length > 0 ? `${b.hours.length} days` : "—"}
+                  {b.hours.length > 0 ? (
+                    <>
+                      <span className="font-mono">{b.hours.length}</span> days
+                    </>
+                  ) : (
+                    "—"
+                  )}
                 </TableCell>
                 <TableCell>
                   <button
                     type="button"
                     onClick={() => toggleActive(b)}
-                    className={`rounded-full border px-2.5 py-0.5 text-xs ${b.active ? "border-moss/40 bg-moss/15 text-moss" : "border-cream/15 text-cream/60"}`}
+                    className={`rounded-full border px-2.5 py-0.5 text-xs ${b.active ? "border-moss/40 bg-moss/15 text-moss" : "border-gold/15 text-cream/60"}`}
                   >
                     {b.active ? "Active" : "Off"}
                   </button>
@@ -277,7 +288,7 @@ export function BarberTable({
                       variant="outline"
                       size="sm"
                       onClick={() => openEdit(b)}
-                      className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
+                      className="border-gold/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
                     >
                       Edit
                     </Button>
@@ -286,7 +297,7 @@ export function BarberTable({
                       variant="outline"
                       size="sm"
                       onClick={() => setDeleteTarget(b)}
-                      className="border-cream/15 bg-transparent text-ember hover:bg-cream/10"
+                      className="border-gold/15 bg-transparent text-ember hover:bg-cream/10"
                     >
                       Delete
                     </Button>
@@ -308,7 +319,7 @@ export function BarberTable({
       >
         <DialogContent className="max-h-[90vh] overflow-y-auto border-cream/10 bg-panel text-cream">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="font-display">
               {editing ? `Edit ${editing.name}` : "Add barber"}
             </DialogTitle>
           </DialogHeader>
@@ -323,7 +334,7 @@ export function BarberTable({
                     setName(e.target.value);
                     if (!slugTouched) setSlug(slugify(e.target.value));
                   }}
-                  className="border-cream/15 bg-coal"
+                  className="border-gold/15 bg-coal"
                 />
               </div>
               <div className="grid gap-1.5">
@@ -335,7 +346,7 @@ export function BarberTable({
                     setSlug(e.target.value);
                     setSlugTouched(true);
                   }}
-                  className="border-cream/15 bg-coal font-mono text-sm"
+                  className="border-gold/15 bg-coal font-mono text-sm"
                 />
               </div>
               <div className="grid gap-1.5">
@@ -344,7 +355,7 @@ export function BarberTable({
                   id="barber-bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="border-cream/15 bg-coal"
+                  className="border-gold/15 bg-coal"
                 />
               </div>
               <label className="flex items-center gap-2 text-sm text-cream/70">
@@ -358,7 +369,7 @@ export function BarberTable({
             </div>
 
             <div>
-              <p className="text-sm font-medium text-cream">
+              <p className="font-display text-base text-cream">
                 Services offered
               </p>
               <div className="mt-2 grid gap-1.5">
@@ -379,10 +390,10 @@ export function BarberTable({
             </div>
 
             <div>
-              <p className="text-sm font-medium text-cream">
+              <p className="font-display text-base text-cream">
                 Weekly hours
               </p>
-              <p className="mt-0.5 text-xs text-cream/40">
+              <p className="mt-0.5 text-xs text-cream/60">
                 One range per day. Unchecked days are days off.
               </p>
               <div className="mt-2 grid gap-1.5">
@@ -399,15 +410,15 @@ export function BarberTable({
                       value={hours[day]?.start ?? "09:00"}
                       disabled={!hours[day]?.on}
                       onChange={(e) => setDay(day, { start: e.target.value })}
-                      className="w-28 border-cream/15 bg-coal"
+                      className="w-28 border-gold/15 bg-coal font-mono text-sm"
                     />
-                    <span className="text-cream/40">–</span>
+                    <span className="text-stone">–</span>
                     <Input
                       type="time"
                       value={hours[day]?.end ?? "17:00"}
                       disabled={!hours[day]?.on}
                       onChange={(e) => setDay(day, { end: e.target.value })}
-                      className="w-28 border-cream/15 bg-coal"
+                      className="w-28 border-gold/15 bg-coal font-mono text-sm"
                     />
                   </div>
                 ))}
@@ -417,7 +428,7 @@ export function BarberTable({
             {editing ? (
               <TimeOffEditor barberId={editing.id} barberName={editing.name} />
             ) : (
-              <p className="text-xs text-cream/40">
+              <p className="text-xs text-cream/60">
                 Time-off blocks can be added after creating the barber.
               </p>
             )}
@@ -427,7 +438,7 @@ export function BarberTable({
               type="button"
               onClick={handleSubmit}
               disabled={pending}
-              className="bg-brass text-ink hover:bg-brass/85"
+              className="bg-gold text-ink hover:bg-gold/85"
             >
               {pending ? "Saving…" : "Save"}
             </Button>
@@ -444,7 +455,7 @@ export function BarberTable({
       >
         <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
-            <DialogTitle>Delete {deleteTarget?.name}?</DialogTitle>
+            <DialogTitle className="font-display">Delete {deleteTarget?.name}?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-cream/60">
             This cannot be undone. Barbers with future appointments cannot be
@@ -455,7 +466,7 @@ export function BarberTable({
               type="button"
               variant="outline"
               onClick={() => setDeleteTarget(null)}
-              className="border-cream/15 text-cream/70"
+              className="border-gold/15 text-cream/70"
             >
               Keep
             </Button>

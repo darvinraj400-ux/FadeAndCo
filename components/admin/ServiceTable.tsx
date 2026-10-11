@@ -204,7 +204,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
         <Button
           type="button"
           onClick={openNew}
-          className="bg-brass text-ink hover:bg-brass/85"
+          className="bg-gold text-ink hover:bg-gold/85"
         >
           Add service
         </Button>
@@ -240,17 +240,17 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 <TableCell className="font-mono text-xs text-cream/60">
                   {s.slug}
                 </TableCell>
-                <TableCell className="text-sm text-cream/70">
+                <TableCell className="font-mono text-sm text-cream/70">
                   {s.durationMinutes} min
                 </TableCell>
-                <TableCell className="text-sm text-cream/70">
+                <TableCell className="font-mono text-sm text-cream/70">
                   {s.priceLabel}
                 </TableCell>
                 <TableCell>
                   <button
                     type="button"
                     onClick={() => toggleActive(s)}
-                    className={`rounded-full border px-2.5 py-0.5 text-xs ${s.active ? "border-moss/40 bg-moss/15 text-moss" : "border-cream/15 text-cream/60"}`}
+                    className={`rounded-full border px-2.5 py-0.5 text-xs ${s.active ? "border-moss/40 bg-moss/15 text-moss" : "border-gold/15 text-cream/60"}`}
                   >
                     {s.active ? "Active" : "Off"}
                   </button>
@@ -262,7 +262,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                       variant="outline"
                       size="sm"
                       onClick={() => openEdit(s)}
-                      className="border-cream/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
+                      className="border-gold/15 bg-transparent text-cream/70 hover:bg-cream/10 hover:text-cream"
                     >
                       Edit
                     </Button>
@@ -271,7 +271,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                       variant="outline"
                       size="sm"
                       onClick={() => setDeleteTarget(s)}
-                      className="border-cream/15 bg-transparent text-ember hover:bg-cream/10"
+                      className="border-gold/15 bg-transparent text-ember hover:bg-cream/10"
                     >
                       Delete
                     </Button>
@@ -293,7 +293,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
       >
         <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="font-display">
               {editing ? "Edit service" : "Add service"}
             </DialogTitle>
           </DialogHeader>
@@ -304,7 +304,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-name"
                 value={form.name}
                 onChange={(e) => set("name", e.target.value)}
-                className="border-cream/15 bg-coal"
+                className="border-gold/15 bg-coal"
               />
             </div>
             <div className="grid gap-1.5">
@@ -313,7 +313,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-slug"
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value, slugTouched: true }))}
-                className="border-cream/15 bg-coal font-mono text-sm"
+                className="border-gold/15 bg-coal font-mono text-sm"
               />
             </div>
             <div className="grid gap-1.5">
@@ -322,7 +322,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                 id="svc-desc"
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
-                className="border-cream/15 bg-coal"
+                className="border-gold/15 bg-coal"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -335,7 +335,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                   max={240}
                   value={form.durationMinutes}
                   onChange={(e) => set("durationMinutes", e.target.value)}
-                  className="border-cream/15 bg-coal"
+                  className="border-gold/15 bg-coal"
                 />
               </div>
               <div className="grid gap-1.5">
@@ -347,7 +347,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
                   step="0.01"
                   value={form.priceRinggit}
                   onChange={(e) => set("priceRinggit", e.target.value)}
-                  className="border-cream/15 bg-coal"
+                  className="border-gold/15 bg-coal"
                 />
               </div>
             </div>
@@ -365,7 +365,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
               type="button"
               onClick={handleSubmit}
               disabled={pending}
-              className="bg-brass text-ink hover:bg-brass/85"
+              className="bg-gold text-ink hover:bg-gold/85"
             >
               {pending ? "Saving…" : "Save"}
             </Button>
@@ -382,7 +382,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
       >
         <DialogContent className="border-cream/10 bg-panel text-cream">
           <DialogHeader>
-            <DialogTitle>Delete {deleteTarget?.name}?</DialogTitle>
+            <DialogTitle className="font-display">Delete {deleteTarget?.name}?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-cream/60">
             This cannot be undone. Services with future appointments cannot be
@@ -393,7 +393,7 @@ export function ServiceTable({ services }: { services: ServiceRow[] }) {
               type="button"
               variant="outline"
               onClick={() => setDeleteTarget(null)}
-              className="border-cream/15 text-cream/70"
+              className="border-gold/15 text-cream/70"
             >
               Keep
             </Button>
